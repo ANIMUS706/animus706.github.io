@@ -1,114 +1,52 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>پورتفولیو رنگین‌کمانی</title>
+  <title>فروشگاه لوازم‌التحریر</title>
   <link rel="stylesheet" href="style.css">
-  <!-- AOS Library -->
-  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
 </head>
-<body class="light">
-  
-  <!-- Loader -->
-  <div id="loader" class="loader-screen">
-    <div class="profile-ring">
-      <div class="profile-inner">
-        <div class="circle"></div>
-      </div>
-    </div>
-    <p>در حال بارگذاری...</p>
+<body>
+
+<header>
+  <h1>فروشگاه لوازم‌التحریر من</h1>
+</header>
+
+<nav>
+  <a href="#">خانه</a>
+  <a href="#">محصولات</a>
+  <a href="#">درباره ما</a>
+  <a href="#">تماس با ما</a>
+  <a href="#">سبد خرید (<span id="cart-count">0</span>)</a>
+</nav>
+
+<div class="container">
+
+  <!-- دسته‌بندی‌ها -->
+  <h2>دسته‌بندی‌ها</h2>
+  <div class="categories">
+    <div class="category">مداد و خودکار</div>
+    <div class="category">دفتر و دفترچه</div>
+    <div class="category">لوازم نقاشی</div>
+    <div class="category">پاک‌کن و تراش</div>
   </div>
 
-  <!-- Header -->
-  <header>
-    <div class="logo-title">
-      <button id="themeToggle">☀️</button>
-      <h1 id="siteTitle" style="color:#28a745">پورتفولیو من</h1>
-    </div>
-    <nav>
-      <ul id="navLinks">
-        <li><a href="#home">خانه</a></li>
-        <li><a href="#projects">پروژه‌ها</a></li>
-        <li><a href="#about">درباره من</a></li>
-        <li><a href="#profile">پروفایل</a></li>
-        <li><a href="#contact">تماس</a></li>
-      </ul>
-      <button id="burger" class="burger"><span></span><span></span><span></span></button>
-    </nav>
-  </header>
-
-  <!-- Sections -->
-  <main>
-    
-        <section id="profile" data-aos="fade-up">
-      <h3>پروفایل رنگین‌کمانی</h3>
-      <div class="profile-ring">
-        <div class="profile-inner">
-          <img src="Jio.jpeg" alt="پروفایل">
-        </div>
-      </div>
-        </section>
-    
-    <section id="home" data-aos="fade-up">
-      <h2>سلام! من یک توسعه‌دهنده وب هستم</h2>
-      <p>این یک دموی پورتفولیو با حالت تاریک/روشن و افکت‌هاست.</p>
-    </section>
-
-    <section id="projects" data-aos="fade-up">
-  <h3>پروژه‌ها</h3>
-  <div id="projects-container"></div>
-    </section>
-
-    <section id="about" data-aos="fade-up">
-      <h3>درباره من</h3>
-      <p>اینجا توضیحاتی درباره خودت می‌نویسی.</p>
-
-        <section id="profile" data-aos="fade-up">
-      <div class="profile-ring">
-        <div class="profile-inner">
-          <img src="sf.jpg" alt="پروفایل">
-        </div>
-      </div>
-        </section>
-      
-  <section id="skills" data-aos="fade-up">
-  <h3>مهارت‌ها</h3>
-
-    <div class="skill">
-      <img src="html.png" alt="HTML">
-      <p>HTML</p>
-    </div>
-    <div class="skill">
-      <img src="css.png" alt="CSS">
-      <p>CSS</p>
-    </div>
-    <div class="skill">
-      <img src="js.png" alt="JavaScript">
-      <p>JavaScript</p>
-    </div>
+  <!-- محصولات -->
+  <h2>محصولات جدید</h2>
+  <div class="products" id="products">
+    <!-- محصولات با JS اضافه می‌شوند -->
   </div>
-  </section>
 
-    <section id="contact" data-aos="fade-up">
-      <h3>تماس با من</h3>
-      <form id="contactForm">
-        <input type="text" name="from_name" placeholder="نام" required>
-        <input type="email" name="reply_to" placeholder="ایمیل" required>
-        <textarea name="message" placeholder="پیام" required></textarea>
-        <button type="submit" class="neon-green">ارسال ایمیل</button>
-      </form>
-    </section>
-  </main>
+</div>
 
-  <footer>© 2025 - ساخته شده با ❤️</footer>
+<footer>
+  <p>© ۲۰۲۵ فروشگاه لوازم‌التحریر من | همه حقوق محفوظ است</p>
+</footer>
 
-  <!-- Scripts -->
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
+
 
 
 
