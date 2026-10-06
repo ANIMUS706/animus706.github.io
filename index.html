@@ -1,0 +1,2233 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>برنامه مطالعه کنکور</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap');
+
+        :root {
+            --bg: #070b16;
+            --bg-light: #0d1324;
+            --card: rgba(17, 24, 39, 0.72);
+            --card-hover: rgba(25, 34, 55, 0.9);
+
+            --primary: #7c3aed;
+            --primary-light: #a78bfa;
+            --secondary: #06b6d4;
+            --pink: #ec4899;
+
+            --text: #f8fafc;
+            --text-light: #cbd5e1;
+            --muted: #94a3b8;
+
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Vazirmatn", Tahoma, sans-serif;
+
+            background:
+                radial-gradient(circle at 10% 10%, rgba(124, 58, 237, 0.20), transparent 30%),
+                radial-gradient(circle at 90% 20%, rgba(6, 182, 212, 0.15), transparent 28%),
+                radial-gradient(circle at 50% 100%, rgba(236, 72, 153, 0.12), transparent 35%),
+                var(--bg);
+
+            color: var(--text);
+            min-height: 100vh;
+            padding: 40px 18px;
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.12;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::before {
+            background: #7c3aed;
+            top: -150px;
+            right: -100px;
+        }
+
+        body::after {
+            background: #06b6d4;
+            bottom: -150px;
+            left: -100px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1150px;
+            margin: auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 35px;
+            animation: fadeDown 0.7s ease;
+        }
+
+        header .logo {
+            width: 72px;
+            height: 72px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin: 0 auto 20px;
+
+            font-size: 35px;
+
+            background: linear-gradient(
+                135deg,
+                rgba(124, 58, 237, 0.25),
+                rgba(6, 182, 212, 0.18)
+            );
+
+            border: 1px solid rgba(167, 139, 250, 0.25);
+            border-radius: 22px;
+
+            box-shadow:
+                0 0 40px rgba(124, 58, 237, 0.25),
+                inset 0 0 25px rgba(255, 255, 255, 0.03);
+        }
+
+        header h1 {
+            font-size: clamp(28px, 5vw, 44px);
+            font-weight: 900;
+            margin-bottom: 10px;
+
+            background: linear-gradient(
+                90deg,
+                #c4b5fd,
+                #818cf8,
+                #22d3ee
+            );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        header p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .glass {
+            background: var(--card);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .add-section {
+            padding: 28px;
+            border-radius: 24px;
+            margin-bottom: 25px;
+            animation: fadeUp 0.7s ease;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .section-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 13px;
+
+            background: linear-gradient(
+                135deg,
+                rgba(124, 58, 237, 0.25),
+                rgba(99, 102, 241, 0.12)
+            );
+
+            color: #c4b5fd;
+            font-size: 20px;
+        }
+
+        .section-title h2 {
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .section-title span {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        #studyForm {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 14px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: var(--text-light);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            height: 48px;
+
+            padding: 0 14px;
+
+            color: var(--text);
+            background: rgba(15, 23, 42, 0.8);
+
+            border: 1px solid rgba(148, 163, 184, 0.14);
+            border-radius: 12px;
+
+            outline: none;
+
+            font-family: inherit;
+            font-size: 13px;
+
+            transition: 0.25s;
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .form-group select option {
+            background: #111827;
+            color: white;
+        }
+
+        .form-group input::placeholder {
+            color: #64748b;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: rgba(129, 140, 248, 0.8);
+
+            box-shadow:
+                0 0 0 3px rgba(124, 58, 237, 0.12),
+                0 0 25px rgba(124, 58, 237, 0.08);
+
+            background: rgba(17, 24, 39, 0.95);
+        }
+
+        .add-btn {
+            height: 48px;
+
+            border: none;
+            border-radius: 12px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #4f46e5
+                );
+
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 800;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 10px 30px rgba(124, 58, 237, 0.25);
+
+            transition: 0.25s;
+
+            grid-column: span 2;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 15px 35px rgba(124, 58, 237, 0.4);
+        }
+
+        .add-btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+
+            padding: 22px;
+
+            border-radius: 20px;
+
+            background: var(--card);
+            border: 1px solid var(--border);
+
+            box-shadow: var(--shadow);
+
+            text-align: center;
+
+            backdrop-filter: blur(20px);
+
+            transition: 0.3s;
+
+            animation: fadeUp 0.8s ease;
+        }
+
+        .stat-card::before {
+            content: "";
+
+            position: absolute;
+            width: 100px;
+            height: 100px;
+
+            border-radius: 50%;
+
+            background: var(--primary);
+            opacity: 0.08;
+
+            filter: blur(30px);
+
+            top: -40px;
+            right: -30px;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: var(--card-hover);
+
+            border-color: rgba(167, 139, 250, 0.2);
+        }
+
+        .stat-card span {
+            display: block;
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card strong {
+            display: block;
+
+            font-size: 28px;
+            font-weight: 900;
+
+            background: linear-gradient(
+                135deg,
+                #c4b5fd,
+                #67e8f9
+            );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .progress-wrapper {
+            margin-top: -20px;
+            margin-bottom: 30px;
+
+            padding: 18px 22px;
+
+            border-radius: 18px;
+
+            background: rgba(17, 24, 39, 0.55);
+            border: 1px solid var(--border);
+
+            box-shadow: var(--shadow);
+        }
+
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 10px;
+        }
+
+        .progress-top span:first-child {
+            color: var(--text-light);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .progress-top span:last-child {
+            color: #a78bfa;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+
+            background: rgba(15, 23, 42, 0.9);
+
+            border-radius: 50px;
+
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+
+            border-radius: inherit;
+
+            background: linear-gradient(
+                90deg,
+                #7c3aed,
+                #8b5cf6,
+                #22d3ee
+            );
+
+            box-shadow:
+                0 0 18px rgba(124, 58, 237, 0.45);
+
+            transition: width 0.5s ease;
+        }
+
+        .schedule-section {
+            margin-bottom: 25px;
+        }
+
+        .schedule-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .schedule-title h2 {
+            font-size: 20px;
+        }
+
+        .schedule-title .badge {
+            color: #c4b5fd;
+
+            background: rgba(124, 58, 237, 0.1);
+
+            border: 1px solid rgba(124, 58, 237, 0.2);
+
+            padding: 7px 12px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+        }
+
+        #schedule {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .day-card {
+            position: relative;
+
+            padding: 20px;
+
+            border-radius: 21px;
+
+            background: var(--card);
+            border: 1px solid var(--border);
+
+            box-shadow: var(--shadow);
+
+            backdrop-filter: blur(20px);
+
+            transition: 0.3s;
+
+            animation: fadeUp 0.8s ease;
+        }
+
+        .day-card:hover {
+            transform: translateY(-4px);
+
+            border-color: rgba(129, 140, 248, 0.25);
+
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(124, 58, 237, 0.08);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding-bottom: 15px;
+            margin-bottom: 14px;
+
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .day-header h3 {
+            font-size: 17px;
+            font-weight: 800;
+
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .day-header h3::before {
+            content: "";
+
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: linear-gradient(
+                135deg,
+                #8b5cf6,
+                #22d3ee
+            );
+
+            box-shadow: 0 0 12px #8b5cf6;
+        }
+
+        .day-hours {
+            padding: 6px 10px;
+
+            border-radius: 8px;
+
+            background: rgba(124, 58, 237, 0.1);
+            color: #c4b5fd;
+
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .tasks {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .task {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            padding: 13px;
+
+            background: rgba(15, 23, 42, 0.55);
+
+            border: 1px solid rgba(148, 163, 184, 0.08);
+
+            border-radius: 13px;
+
+            transition: 0.25s;
+
+            animation: taskIn 0.3s ease;
+        }
+
+        .task:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(129, 140, 248, 0.2);
+            transform: translateX(-3px);
+        }
+
+        .checkbox-wrapper {
+            position: relative;
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+        .task-checkbox {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .checkmark {
+            width: 22px;
+            height: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 7px;
+
+            border: 2px solid #475569;
+
+            background: rgba(15, 23, 42, 0.8);
+
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+        .checkmark::after {
+            content: "✓";
+
+            color: white;
+            font-size: 13px;
+            font-weight: 900;
+
+            opacity: 0;
+            transform: scale(0.5);
+
+            transition: 0.2s;
+        }
+
+        .task-checkbox:checked + .checkmark {
+            border-color: #8b5cf6;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #06b6d4
+                );
+
+            box-shadow:
+                0 0 15px rgba(124, 58, 237, 0.35);
+        }
+
+        .task-checkbox:checked + .checkmark::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .task-checkbox:focus-visible + .checkmark {
+            outline: 3px solid rgba(124, 58, 237, 0.3);
+        }
+
+        .task-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .task-subject {
+            font-size: 13px;
+            font-weight: 800;
+            color: #f8fafc;
+
+            margin-bottom: 4px;
+        }
+
+        .task-topic {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .task-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 3px;
+
+            white-space: nowrap;
+        }
+
+        .task-hours {
+            color: #a78bfa;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .task-time {
+            color: #67e8f9;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .delete-task {
+            border: none;
+
+            width: 32px;
+            height: 32px;
+
+            border-radius: 9px;
+
+            background: rgba(239, 68, 68, 0.08);
+            color: #f87171;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .delete-task:hover {
+            background: rgba(239, 68, 68, 0.18);
+            transform: scale(1.08);
+        }
+
+        .task.completed {
+            opacity: 0.5;
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .task.completed .task-subject {
+            text-decoration: line-through;
+            color: #94a3b8;
+        }
+
+        .task.completed .task-time {
+            color: #4ade80;
+        }
+
+        .empty-message {
+            text-align: center;
+
+            color: #475569;
+
+            padding: 24px 5px;
+
+            font-size: 12px;
+        }
+
+        .clear-btn {
+            display: block;
+
+            margin: 25px auto 0;
+
+            padding: 12px 22px;
+
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            border-radius: 11px;
+
+            background: rgba(239, 68, 68, 0.07);
+            color: #f87171;
+
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+        .clear-btn:hover {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.3);
+
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes taskIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 1000px) {
+
+            #studyForm {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .add-btn {
+                grid-column: span 3;
+            }
+        }
+
+        @media (max-width: 900px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            #schedule {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            body {
+                padding: 25px 12px;
+            }
+
+            header {
+                margin-bottom: 25px;
+            }
+
+            header .logo {
+                width: 62px;
+                height: 62px;
+                font-size: 29px;
+            }
+
+            header h1 {
+                font-size: 27px;
+            }
+
+            header p {
+                font-size: 12px;
+            }
+
+            .add-section {
+                padding: 20px;
+                border-radius: 20px;
+            }
+
+            #studyForm {
+                grid-template-columns: 1fr;
+            }
+
+            .add-btn {
+                grid-column: span 1;
+            }
+
+            .stats {
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 16px 10px;
+                border-radius: 16px;
+            }
+
+            .stat-card span {
+                font-size: 21px;
+            }
+
+            .stat-card strong {
+                font-size: 23px;
+            }
+
+            .progress-wrapper {
+                padding: 15px;
+            }
+
+            .schedule-title h2 {
+                font-size: 17px;
+            }
+
+            .schedule-title .badge {
+                font-size: 9px;
+            }
+
+            .day-card {
+                padding: 15px;
+            }
+
+            .task {
+                padding: 10px;
+                gap: 8px;
+            }
+
+            .task-details {
+                display: flex;
+                align-items: flex-end;
+            }
+
+            .delete-task {
+                width: 29px;
+                height: 29px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <div class="logo">📚</div>
+
+        <h1>
+            برنامه مطالعه کنکور
+        </h1>
+
+        <p>
+            برنامه هفتگی خودت رو بساز و پیشرفتت رو دنبال کن 🚀
+        </p>
+    </header>
+
+
+    <section class="add-section glass">
+
+        <div class="section-title">
+
+            <div class="section-icon">
+                ➕
+            </div>
+
+            <div>
+                <h2>
+                    اضافه کردن مطالعه
+                </h2>
+
+                <span>
+                    مطالعه جدیدت رو به برنامه اضافه کن
+                </span>
+            </div>
+
+        </div>
+
+
+        <form id="studyForm">
+
+            <div class="form-group">
+
+                <label for="day">
+                    روز
+                </label>
+
+                <select id="day" required>
+
+                    <option value="شنبه">شنبه</option>
+                    <option value="یکشنبه">یکشنبه</option>
+                    <option value="دوشنبه">دوشنبه</option>
+                    <option value="سه‌شنبه">سه‌شنبه</option>
+                    <option value="چهارشنبه">چهارشنبه</option>
+                    <option value="پنجشنبه">پنجشنبه</option>
+                    <option value="جمعه">جمعه</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="subject">
+                    درس
+                </label>
+
+                <input
+                    type="text"
+                    id="subject"
+                    placeholder="مثلاً ریاضی"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="topic">
+                    مبحث
+                </label>
+
+                <input
+                    type="text"
+                    id="topic"
+                    placeholder="مثلاً تابع"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="hours">
+                    ساعت مطالعه
+                </label>
+
+                <input
+                    type="number"
+                    id="hours"
+                    min="0.5"
+                    step="0.5"
+                    placeholder="خودکار محاسبه می‌شود"
+                    readonly
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="startTime">
+                    ساعت شروع
+                </label>
+
+                <input
+                    type="time"
+                    id="startTime"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="endTime">
+                    ساعت پایان
+                </label>
+
+                <input
+                    type="time"
+                    id="endTime"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="add-btn"
+            >
+                ✨ افزودن به برنامه
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <section class="stats">
+
+        <div class="stat-card">
+
+            <span>📖</span>
+
+            <strong id="totalSubjects">
+                0
+            </strong>
+
+            <p>
+                کل مطالعه‌ها
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>✅</span>
+
+            <strong id="completedSubjects">
+                0
+            </strong>
+
+            <p>
+                انجام شده
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>⏱️</span>
+
+            <strong id="totalHours">
+                0
+            </strong>
+
+            <p>
+                ساعت مطالعه
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>📊</span>
+
+            <strong id="progressPercent">
+                0%
+            </strong>
+
+            <p>
+                پیشرفت
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <section class="progress-wrapper">
+
+        <div class="progress-top">
+
+            <span>
+                پیشرفت هفتگی
+            </span>
+
+            <span id="progressText">
+                0%
+            </span>
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                id="progressFill"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+    <section class="schedule-section">
+
+        <div class="schedule-title">
+
+            <h2>
+                🗓️ برنامه هفتگی
+            </h2>
+
+            <div class="badge">
+                شنبه تا جمعه
+            </div>
+
+        </div>
+
+
+        <div id="schedule">
+
+            <div class="day-card" data-day="شنبه">
+
+                <div class="day-header">
+
+                    <h3>شنبه</h3>
+
+                    <span class="day-hours">
+                        0 ساعت
+                    </span>
+
+                </div>
+
+                <div class="tasks"></div>
+
+            </div>
+
+
+            <div class="day-card" data-day="یکشنبه">
+
+                <div class="day-header">
+
+                    <h3>یکشنبه</h3>
+
+                    <span class="day-hours">
+                        0 ساعت
+                    </span>
+
+                </div>
+
+                <div class="tasks"></div>
+
+            </div>
+
+
+            <div class="day-card" data-day="دوشنبه">
+
+                <div class="day-header">
+
+                    <h3>دوشنبه</h3>
+
+                    <span class="day-hours">
+                        0 ساعت
+                    </span>
+
+                </div>
+
+                <div class="tasks"></div>
+
+            </div>
+
+
+            <div class="day-card" data-day="سه‌شنبه">
+
+                <div class="day-header">
+
+                    <h3>سه‌شنبه</h3>
+
+                    <span class="day-hours">
+                        0 ساعت
+                    </span>
+
+                </div>
+
+                <div class="tasks"></div>
+
+            </div>
+
+
+            <div class="day-card" data-day="چهارشنبه">
+
+                <div class="day-header">
+
+                    <h3>چهارشنبه</h3>
+
+                    <span class="day-hours">
+                        0 ساعت
+                    </span>
+
+                </div>
+
+                <div class="tasks"></div>
+
+            </div>
+
+
+            <div class="day-card" data-day="پنجشنبه">
+
+                <div class="day-header">
+
+                    <h3>پنجشنبه</h3>
+
+                    <span class="day-hours">
+                        0 ساعت
+                    </span>
+
+                </div>
+
+                <div class="tasks"></div>
+
+            </div>
+
+
+            <div class="day-card" data-day="جمعه">
+
+                <div class="day-header">
+
+                    <h3>جمعه</h3>
+
+                    <span class="day-hours">
+                        0 ساعت
+                    </span>
+
+                </div>
+
+                <div class="tasks"></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <button
+        id="clearAll"
+        class="clear-btn"
+        type="button"
+    >
+        🗑️ پاک کردن کل برنامه
+    </button>
+
+</div>
+
+
+<script>
+
+    /* =========================
+       Elements
+    ========================= */
+
+    const studyForm =
+        document.getElementById("studyForm");
+
+    const dayInput =
+        document.getElementById("day");
+
+    const subjectInput =
+        document.getElementById("subject");
+
+    const topicInput =
+        document.getElementById("topic");
+
+    const hoursInput =
+        document.getElementById("hours");
+
+    const startTimeInput =
+        document.getElementById("startTime");
+
+    const endTimeInput =
+        document.getElementById("endTime");
+
+
+    const totalSubjects =
+        document.getElementById("totalSubjects");
+
+    const completedSubjects =
+        document.getElementById("completedSubjects");
+
+    const totalHours =
+        document.getElementById("totalHours");
+
+    const progressPercent =
+        document.getElementById("progressPercent");
+
+    const progressText =
+        document.getElementById("progressText");
+
+    const progressFill =
+        document.getElementById("progressFill");
+
+    const clearAllButton =
+        document.getElementById("clearAll");
+
+
+    /* =========================
+       Load Saved Data
+    ========================= */
+
+    let studyTasks = [];
+
+    try {
+
+        const savedTasks =
+            localStorage.getItem("konkurStudyTasks");
+
+        if (savedTasks) {
+
+            studyTasks =
+                JSON.parse(savedTasks);
+
+        }
+
+    } catch (error) {
+
+        studyTasks = [];
+
+    }
+
+
+    /* =========================
+       Save Data
+    ========================= */
+
+    function saveTasks() {
+
+        localStorage.setItem(
+            "konkurStudyTasks",
+            JSON.stringify(studyTasks)
+        );
+
+    }
+
+
+    /* =========================
+       Calculate Duration
+    ========================= */
+
+    function calculateDuration(startTime, endTime) {
+
+        if (!startTime || !endTime) {
+            return 0;
+        }
+
+        const [startHour, startMinute] =
+            startTime.split(":").map(Number);
+
+        const [endHour, endMinute] =
+            endTime.split(":").map(Number);
+
+
+        const startTotalMinutes =
+            startHour * 60 + startMinute;
+
+        const endTotalMinutes =
+            endHour * 60 + endMinute;
+
+
+        return endTotalMinutes - startTotalMinutes;
+
+    }
+
+
+    /* =========================
+       Format Duration
+    ========================= */
+
+    function formatDuration(totalMinutes) {
+
+        const minutes =
+            Math.round(totalMinutes);
+
+        const hours =
+            Math.floor(minutes / 60);
+
+        const remainingMinutes =
+            minutes % 60;
+
+
+        if (hours === 0) {
+
+            return `${remainingMinutes} دقیقه`;
+
+        }
+
+
+        if (remainingMinutes === 0) {
+
+            return `${hours} ساعت`;
+
+        }
+
+
+        return `${hours} ساعت و ${remainingMinutes} دقیقه`;
+
+    }
+
+
+    /* =========================
+       Update Hours Input
+    ========================= */
+
+    function updateHoursFromTime() {
+
+        const startTime =
+            startTimeInput.value;
+
+        const endTime =
+            endTimeInput.value;
+
+
+        if (!startTime || !endTime) {
+
+            hoursInput.value = "";
+
+            return;
+
+        }
+
+
+        const durationMinutes =
+            calculateDuration(
+                startTime,
+                endTime
+            );
+
+
+        if (durationMinutes <= 0) {
+
+            hoursInput.value = "";
+
+            return;
+
+        }
+
+
+        const hours =
+            durationMinutes / 60;
+
+
+        hoursInput.value =
+            Number.isInteger(hours)
+                ? hours
+                : hours.toFixed(2);
+
+    }
+
+
+    startTimeInput.addEventListener(
+        "change",
+        updateHoursFromTime
+    );
+
+
+    endTimeInput.addEventListener(
+        "change",
+        updateHoursFromTime
+    );
+
+
+    /* =========================
+       Add Study
+    ========================= */
+
+    studyForm.addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const day =
+                dayInput.value;
+
+            const subject =
+                subjectInput.value.trim();
+
+            const topic =
+                topicInput.value.trim();
+
+            const startTime =
+                startTimeInput.value;
+
+            const endTime =
+                endTimeInput.value;
+
+
+            /* Validate Subject */
+
+            if (!subject) {
+
+                alert(
+                    "لطفاً نام درس را وارد کن."
+                );
+
+                subjectInput.focus();
+
+                return;
+            }
+
+
+            /* Validate Time */
+
+            if (!startTime || !endTime) {
+
+                alert(
+                    "لطفاً ساعت شروع و پایان را وارد کن."
+                );
+
+                if (!startTime) {
+                    startTimeInput.focus();
+                } else {
+                    endTimeInput.focus();
+                }
+
+                return;
+            }
+
+
+            /* Validate Time Order */
+
+            const durationMinutes =
+                calculateDuration(
+                    startTime,
+                    endTime
+                );
+
+
+            if (durationMinutes <= 0) {
+
+                alert(
+                    "ساعت پایان باید بعد از ساعت شروع باشد."
+                );
+
+                endTimeInput.focus();
+
+                return;
+            }
+
+
+            /* Calculate Hours */
+
+            const hours =
+                durationMinutes / 60;
+
+
+            /* New Task */
+
+            const newTask = {
+
+                id:
+                    Date.now() +
+                    Math.random(),
+
+                day:
+                    day,
+
+                subject:
+                    subject,
+
+                topic:
+                    topic,
+
+                hours:
+                    hours,
+
+                durationMinutes:
+                    durationMinutes,
+
+                startTime:
+                    startTime,
+
+                endTime:
+                    endTime,
+
+                completed:
+                    false
+
+            };
+
+
+            studyTasks.push(
+                newTask
+            );
+
+
+            saveTasks();
+
+            renderSchedule();
+
+            updateStats();
+
+
+            studyForm.reset();
+
+            hoursInput.value = "";
+
+            dayInput.value =
+                day;
+
+        }
+    );
+
+
+    /* =========================
+       Render Schedule
+    ========================= */
+
+    function renderSchedule() {
+
+        const dayCards =
+            document.querySelectorAll(
+                ".day-card"
+            );
+
+
+        dayCards.forEach(
+            function(dayCard) {
+
+                const day =
+                    dayCard.dataset.day;
+
+
+                const tasksContainer =
+                    dayCard.querySelector(
+                        ".tasks"
+                    );
+
+
+                const dayHoursElement =
+                    dayCard.querySelector(
+                        ".day-hours"
+                    );
+
+
+                tasksContainer.innerHTML =
+                    "";
+
+
+                const tasks =
+                    studyTasks.filter(
+                        function(task) {
+
+                            return task.day === day;
+
+                        }
+                    );
+
+
+                /* Day Hours */
+
+                const dayMinutes =
+                    tasks.reduce(
+                        function(total, task) {
+
+                            if (
+                                task.durationMinutes !== undefined
+                            ) {
+
+                                return total +
+                                    Number(
+                                        task.durationMinutes || 0
+                                    );
+
+                            }
+
+
+                            return total +
+                                Number(task.hours || 0) * 60;
+
+                        },
+                        0
+                    );
+
+
+                dayHoursElement.textContent =
+                    formatDuration(dayMinutes);
+
+
+                /* Empty */
+
+                if (
+                    tasks.length === 0
+                ) {
+
+                    const emptyMessage =
+                        document.createElement(
+                            "div"
+                        );
+
+                    emptyMessage.className =
+                        "empty-message";
+
+                    emptyMessage.textContent =
+                        "هنوز برنامه‌ای برای این روز ثبت نشده.";
+
+                    tasksContainer.appendChild(
+                        emptyMessage
+                    );
+
+                    return;
+                }
+
+
+                /* Tasks */
+
+                tasks.forEach(
+                    function(task) {
+
+                        const taskElement =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        taskElement.className =
+                            "task";
+
+
+                        if (
+                            task.completed
+                        ) {
+
+                            taskElement.classList.add(
+                                "completed"
+                            );
+
+                        }
+
+
+                        /* Checkbox */
+
+                        const checkboxWrapper =
+                            document.createElement(
+                                "div"
+                            );
+
+                        checkboxWrapper.className =
+                            "checkbox-wrapper";
+
+
+                        const checkbox =
+                            document.createElement(
+                                "input"
+                            );
+
+                        checkbox.type =
+                            "checkbox";
+
+                        checkbox.className =
+                            "task-checkbox";
+
+                        checkbox.checked =
+                            Boolean(
+                                task.completed
+                            );
+
+                        checkbox.id =
+                            `task-${task.id}`;
+
+
+                        const checkmark =
+                            document.createElement(
+                                "label"
+                            );
+
+                        checkmark.className =
+                            "checkmark";
+
+                        checkmark.htmlFor =
+                            checkbox.id;
+
+                        checkmark.title =
+                            "علامت‌گذاری به عنوان انجام شده";
+
+
+                        checkboxWrapper.appendChild(
+                            checkbox
+                        );
+
+                        checkboxWrapper.appendChild(
+                            checkmark
+                        );
+
+
+                        checkbox.addEventListener(
+                            "change",
+                            function() {
+
+                                task.completed =
+                                    checkbox.checked;
+
+
+                                saveTasks();
+
+                                renderSchedule();
+
+                                updateStats();
+
+                            }
+                        );
+
+
+                        /* Info */
+
+                        const taskInfo =
+                            document.createElement(
+                                "div"
+                            );
+
+                        taskInfo.className =
+                            "task-info";
+
+
+                        const subject =
+                            document.createElement(
+                                "div"
+                            );
+
+                        subject.className =
+                            "task-subject";
+
+                        subject.textContent =
+                            task.subject;
+
+
+                        taskInfo.appendChild(
+                            subject
+                        );
+
+
+                        if (
+                            task.topic
+                        ) {
+
+                            const topic =
+                                document.createElement(
+                                    "div"
+                                );
+
+                            topic.className =
+                                "task-topic";
+
+                            topic.textContent =
+                                task.topic;
+
+
+                            taskInfo.appendChild(
+                                topic
+                            );
+
+                        }
+
+
+                        /* Details */
+
+                        const details =
+                            document.createElement(
+                                "div"
+                            );
+
+                        details.className =
+                            "task-details";
+
+
+                        const taskHours =
+                            document.createElement(
+                                "span"
+                            );
+
+                        taskHours.className =
+                            "task-hours";
+
+
+                        const taskMinutes =
+                            task.durationMinutes !== undefined
+                                ? Number(task.durationMinutes)
+                                : Number(task.hours || 0) * 60;
+
+
+                        taskHours.textContent =
+                            formatDuration(taskMinutes);
+
+
+                        details.appendChild(
+                            taskHours
+                        );
+
+
+                        /* Time */
+
+                        if (
+                            task.startTime ||
+                            task.endTime
+                        ) {
+
+                            const taskTime =
+                                document.createElement(
+                                    "span"
+                                );
+
+                            taskTime.className =
+                                "task-time";
+
+
+                            if (
+                                task.startTime &&
+                                task.endTime
+                            ) {
+
+                                taskTime.textContent =
+                                    `${task.startTime} تا ${task.endTime}`;
+
+                            } else if (
+                                task.startTime
+                            ) {
+
+                                taskTime.textContent =
+                                    `شروع: ${task.startTime}`;
+
+                            } else {
+
+                                taskTime.textContent =
+                                    `پایان: ${task.endTime}`;
+
+                            }
+
+
+                            details.appendChild(
+                                taskTime
+                            );
+
+                        }
+
+
+                        /* Delete */
+
+                        const deleteButton =
+                            document.createElement(
+                                "button"
+                            );
+
+
+                        deleteButton.type =
+                            "button";
+
+                        deleteButton.className =
+                            "delete-task";
+
+                        deleteButton.textContent =
+                            "🗑️";
+
+                        deleteButton.title =
+                            "حذف مطالعه";
+
+
+                        deleteButton.addEventListener(
+                            "click",
+                            function() {
+
+                                const confirmed =
+                                    confirm(
+                                        `آیا می‌خواهی مطالعه «${task.subject}» را حذف کنی؟`
+                                    );
+
+
+                                if (
+                                    !confirmed
+                                ) {
+                                    return;
+                                }
+
+
+                                studyTasks =
+                                    studyTasks.filter(
+                                        function(item) {
+
+                                            return (
+                                                item.id !==
+                                                task.id
+                                            );
+
+                                        }
+                                    );
+
+
+                                saveTasks();
+
+                                renderSchedule();
+
+                                updateStats();
+
+                            }
+                        );
+
+
+                        /* Build */
+
+                        taskElement.appendChild(
+                            checkboxWrapper
+                        );
+
+                        taskElement.appendChild(
+                            taskInfo
+                        );
+
+                        taskElement.appendChild(
+                            details
+                        );
+
+                        taskElement.appendChild(
+                            deleteButton
+                        );
+
+
+                        tasksContainer.appendChild(
+                            taskElement
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================
+       Statistics
+    ========================= */
+
+    function updateStats() {
+
+        const total =
+            studyTasks.length;
+
+
+        const completed =
+            studyTasks.filter(
+                function(task) {
+
+                    return task.completed;
+
+                }
+            ).length;
+
+
+        const totalMinutes =
+            studyTasks.reduce(
+                function(total, task) {
+
+                    if (
+                        task.durationMinutes !== undefined
+                    ) {
+
+                        return total +
+                            Number(
+                                task.durationMinutes || 0
+                            );
+
+                    }
+
+
+                    return total +
+                        Number(task.hours || 0) * 60;
+
+                },
+                0
+            );
+
+
+        const percentage =
+            total > 0
+                ? Math.round(
+                    (completed / total) * 100
+                )
+                : 0;
+
+
+        /* Stats */
+
+        totalSubjects.textContent =
+            total;
+
+        completedSubjects.textContent =
+            completed;
+
+        totalHours.textContent =
+            formatDuration(totalMinutes);
+
+        progressPercent.textContent =
+            `${percentage}%`;
+
+
+        /* Progress */
+
+        progressText.textContent =
+            `${percentage}%`;
+
+
+        progressFill.style.width =
+            `${percentage}%`;
+
+    }
+
+
+    /* =========================
+       Clear All
+    ========================= */
+
+    clearAllButton.addEventListener(
+        "click",
+        function() {
+
+            if (
+                studyTasks.length === 0
+            ) {
+
+                alert(
+                    "برنامه‌ای برای پاک کردن وجود ندارد."
+                );
+
+                return;
+            }
+
+
+            const confirmed =
+                confirm(
+                    "آیا مطمئنی می‌خواهی کل برنامه هفته را پاک کنی؟"
+                );
+
+
+            if (
+                !confirmed
+            ) {
+
+                return;
+            }
+
+
+            studyTasks =
+                [];
+
+
+            saveTasks();
+
+            renderSchedule();
+
+            updateStats();
+
+        }
+    );
+
+
+    /* =========================
+       Initial
+    ========================= */
+
+    renderSchedule();
+
+    updateStats();
+
+</script>
+
+</body>
+  </html>
