@@ -1,0 +1,2285 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>StudyTune | برنامه‌ریز مطالعه کنکور</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --bg:#070b16;
+    --panel:#101827;
+    --panel2:#0c1422;
+    --panel3:#172033;
+    --text:#f8fafc;
+    --muted:#8fa0b8;
+    --border:rgba(255,255,255,.08);
+    --primary:#7c3aed;
+    --primary2:#4f46e5;
+    --cyan:#06b6d4;
+    --green:#22c55e;
+    --orange:#f59e0b;
+    --red:#ef4444;
+    --pink:#ec4899;
+    --radius:20px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+    font-family:"Vazirmatn",Tahoma,sans-serif;
+    background:
+        radial-gradient(circle at 10% 0%,rgba(124,58,237,.18),transparent 30%),
+        radial-gradient(circle at 90% 15%,rgba(6,182,212,.12),transparent 25%),
+        var(--bg);
+    color:var(--text);
+    min-height:100vh;
+}
+
+button,input,select,textarea{font-family:inherit}
+
+button{cursor:pointer}
+
+.app{
+    width:min(1250px,100%);
+    margin:auto;
+    padding:18px 15px 100px;
+}
+
+/* HEADER */
+
+.topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    padding:8px 0 20px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand-icon{
+    width:48px;
+    height:48px;
+    display:grid;
+    place-items:center;
+    border-radius:15px;
+    background:linear-gradient(135deg,#7c3aed,#06b6d4);
+    font-size:25px;
+    box-shadow:0 10px 35px rgba(124,58,237,.3);
+}
+
+.brand h1{
+    font-size:20px;
+    font-weight:900;
+}
+
+.brand p{
+    color:var(--muted);
+    font-size:10px;
+    margin-top:2px;
+}
+
+.top-actions{
+    display:flex;
+    gap:8px;
+}
+
+.icon-btn{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:white;
+    font-size:17px;
+}
+
+/* NAV */
+
+.nav{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:7px;
+    padding:7px;
+    background:rgba(16,24,39,.8);
+    border:1px solid var(--border);
+    border-radius:17px;
+    margin-bottom:18px;
+    position:sticky;
+    top:8px;
+    z-index:20;
+    backdrop-filter:blur(20px);
+}
+
+.nav button{
+    height:43px;
+    border:0;
+    border-radius:11px;
+    color:var(--muted);
+    background:transparent;
+    font-weight:800;
+    font-size:11px;
+}
+
+.nav button.active{
+    color:white;
+    background:linear-gradient(135deg,var(--primary),var(--primary2));
+}
+
+/* PAGES */
+
+.page{display:none}
+.page.active{display:block}
+
+/* DAY HEADER */
+
+.day-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:16px;
+}
+
+.day-title h2{
+    font-size:24px;
+    font-weight:900;
+}
+
+.day-title p{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:3px;
+}
+
+.date-actions{
+    display:flex;
+    gap:6px;
+}
+
+.date-actions button{
+    height:38px;
+    min-width:38px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:white;
+}
+
+/* PROGRESS */
+
+.daily-progress{
+    background:linear-gradient(135deg,rgba(124,58,237,.18),rgba(6,182,212,.08));
+    border:1px solid rgba(124,58,237,.22);
+    border-radius:18px;
+    padding:17px;
+    margin-bottom:17px;
+}
+
+.progress-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+}
+
+.progress-head strong{font-size:13px}
+.progress-head span{color:#c4b5fd;font-weight:900;font-size:13px}
+
+.progress{
+    height:8px;
+    border-radius:20px;
+    background:#0a101c;
+    overflow:hidden;
+}
+
+.progress div{
+    height:100%;
+    width:0;
+    background:linear-gradient(90deg,#7c3aed,#22d3ee);
+    border-radius:inherit;
+    transition:.4s;
+}
+
+/* TIMELINE */
+
+.timeline{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.timeline-item{
+    display:grid;
+    grid-template-columns:70px 16px 1fr;
+    gap:10px;
+    min-height:80px;
+}
+
+.time{
+    text-align:left;
+    color:var(--muted);
+    font-size:10px;
+    padding-top:12px;
+    direction:ltr;
+}
+
+.line{
+    position:relative;
+}
+
+.line:before{
+    content:"";
+    position:absolute;
+    top:0;
+    bottom:-8px;
+    width:2px;
+    background:rgba(148,163,184,.13);
+    right:7px;
+}
+
+.dot{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:#64748b;
+    position:absolute;
+    top:12px;
+    right:0;
+    z-index:2;
+    border:3px solid var(--bg);
+}
+
+.timeline-item.done .dot{
+    background:var(--green);
+}
+
+.timeline-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-right:3px solid var(--primary);
+    border-radius:15px;
+    padding:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    transition:.2s;
+}
+
+.timeline-item.done .timeline-card{
+    opacity:.65;
+    border-right-color:var(--green);
+}
+
+.activity-main{
+    min-width:0;
+}
+
+.activity-title{
+    font-size:13px;
+    font-weight:900;
+}
+
+.activity-topic{
+    color:var(--muted);
+    font-size:10px;
+    margin-top:4px;
+}
+
+.activity-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-top:7px;
+}
+
+.badge{
+    background:rgba(124,58,237,.12);
+    color:#c4b5fd;
+    padding:4px 7px;
+    border-radius:7px;
+    font-size:9px;
+}
+
+.activity-actions{
+    display:flex;
+    gap:5px;
+    flex-shrink:0;
+}
+
+.small-btn{
+    width:34px;
+    height:34px;
+    border-radius:9px;
+    border:1px solid var(--border);
+    background:#121c2d;
+    color:white;
+}
+
+.small-btn.start{
+    background:rgba(34,197,94,.12);
+    color:#4ade80;
+}
+
+.small-btn.delete{
+    color:#f87171;
+}
+
+/* EMPTY */
+
+.empty{
+    padding:45px 20px;
+    text-align:center;
+    color:var(--muted);
+    background:rgba(16,24,39,.55);
+    border:1px dashed var(--border);
+    border-radius:18px;
+}
+
+.empty-icon{
+    font-size:35px;
+    margin-bottom:8px;
+}
+
+/* FAB */
+
+.fab{
+    position:fixed;
+    left:22px;
+    bottom:22px;
+    width:58px;
+    height:58px;
+    border:0;
+    border-radius:18px;
+    color:white;
+    font-size:25px;
+    background:linear-gradient(135deg,var(--primary),var(--primary2));
+    box-shadow:0 15px 35px rgba(124,58,237,.4);
+    z-index:50;
+}
+
+/* CARDS */
+
+.card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:18px;
+    margin-bottom:14px;
+}
+
+.card-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:15px;
+}
+
+.card-title h2{
+    font-size:16px;
+}
+
+.card-title span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* WEEK */
+
+.week-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:6px;
+}
+
+.week-day{
+    min-height:110px;
+    border:1px solid var(--border);
+    background:var(--panel2);
+    border-radius:13px;
+    padding:8px;
+    cursor:pointer;
+}
+
+.week-day.active{
+    border-color:#8b5cf6;
+    background:rgba(124,58,237,.12);
+}
+
+.week-day-name{
+    color:var(--muted);
+    font-size:9px;
+    text-align:center;
+}
+
+.week-day-number{
+    text-align:center;
+    font-size:17px;
+    font-weight:900;
+    margin:5px 0 8px;
+}
+
+.week-task{
+    background:rgba(124,58,237,.16);
+    border-radius:6px;
+    padding:4px;
+    font-size:8px;
+    margin-bottom:3px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+/* STATS */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+.stat{
+    padding:16px 10px;
+    border-radius:15px;
+    background:var(--panel2);
+    border:1px solid var(--border);
+    text-align:center;
+}
+
+.stat-icon{font-size:21px}
+.stat-value{
+    display:block;
+    font-size:21px;
+    font-weight:900;
+    margin:5px 0 2px;
+    color:#c4b5fd;
+}
+.stat-label{
+    font-size:9px;
+    color:var(--muted);
+}
+
+/* SUBJECTS */
+
+.subject-list{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+}
+
+.subject-card{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px;
+    background:var(--panel2);
+    border:1px solid var(--border);
+    border-radius:13px;
+}
+
+.subject-color{
+    width:11px;
+    height:38px;
+    border-radius:10px;
+}
+
+.subject-info{flex:1}
+.subject-info strong{
+    display:block;
+    font-size:12px;
+}
+.subject-info span{
+    color:var(--muted);
+    font-size:9px;
+}
+
+.subject-actions{
+    display:flex;
+    gap:4px;
+}
+
+/* GOALS */
+
+.goal{
+    margin-bottom:15px;
+}
+
+.goal:last-child{margin-bottom:0}
+
+.goal-head{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:7px;
+    font-size:11px;
+}
+
+.goal-head span{color:var(--muted)}
+
+.goal-bar{
+    height:9px;
+    border-radius:20px;
+    background:#0a101c;
+    overflow:hidden;
+}
+
+.goal-fill{
+    height:100%;
+    border-radius:inherit;
+    background:linear-gradient(90deg,#7c3aed,#22d3ee);
+}
+
+/* ANALYTICS */
+
+.chart{
+    height:230px;
+    display:flex;
+    align-items:flex-end;
+    gap:8px;
+    overflow-x:auto;
+    padding-top:20px;
+}
+
+.bar-item{
+    min-width:32px;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    align-items:center;
+    gap:5px;
+}
+
+.bar{
+    width:24px;
+    height:150px;
+    display:flex;
+    align-items:flex-end;
+    border-radius:7px;
+    overflow:hidden;
+    background:#0b1320;
+}
+
+.bar div{
+    width:100%;
+    background:linear-gradient(to top,#7c3aed,#22d3ee);
+    border-radius:7px;
+}
+
+.bar-label{
+    color:var(--muted);
+    font-size:8px;
+}
+
+/* TIMER */
+
+.timer-box{
+    text-align:center;
+    padding:35px 20px;
+}
+
+.timer-subject{
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:10px;
+}
+
+.timer{
+    font-size:64px;
+    font-weight:900;
+    direction:ltr;
+    letter-spacing:2px;
+    background:linear-gradient(90deg,#c4b5fd,#22d3ee);
+    color:transparent;
+    background-clip:text;
+}
+
+.timer-status{
+    color:var(--muted);
+    font-size:11px;
+    margin:5px 0 20px;
+}
+
+.timer-actions{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+}
+
+.timer-actions button{
+    min-width:110px;
+    height:46px;
+    border:0;
+    border-radius:12px;
+    color:white;
+    font-weight:800;
+}
+
+.timer-start{
+    background:linear-gradient(135deg,#7c3aed,#4f46e5);
+}
+
+.timer-stop{
+    background:#172033;
+    border:1px solid var(--border)!important;
+}
+
+/* MODAL */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    backdrop-filter:blur(8px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+    z-index:100;
+}
+
+.modal.show{display:flex}
+
+.modal-box{
+    width:min(540px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:#101827;
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:20px;
+}
+
+.modal-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.modal-head h2{font-size:18px}
+
+.close{
+    width:35px;
+    height:35px;
+    border:0;
+    border-radius:9px;
+    background:#172033;
+    color:white;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:11px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.field.full{grid-column:1/-1}
+
+.field label{
+    font-size:10px;
+    color:var(--light);
+    font-weight:700;
+}
+
+.field input,
+.field select,
+.field textarea{
+    width:100%;
+    min-height:44px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:#0b1320;
+    color:white;
+    padding:9px 11px;
+    outline:none;
+}
+
+.field textarea{
+    min-height:80px;
+    resize:vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+    border-color:#8b5cf6;
+}
+
+.save-btn{
+    width:100%;
+    height:46px;
+    margin-top:14px;
+    border:0;
+    border-radius:11px;
+    color:white;
+    font-weight:900;
+    background:linear-gradient(135deg,#7c3aed,#4f46e5);
+}
+
+/* ROUTINES */
+
+.routine{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:14px;
+    background:var(--panel2);
+    border:1px solid var(--border);
+    border-radius:13px;
+    margin-bottom:8px;
+}
+
+.routine-info strong{
+    display:block;
+    font-size:12px;
+}
+
+.routine-info span{
+    display:block;
+    color:var(--muted);
+    font-size:9px;
+    margin-top:4px;
+}
+
+.routine-actions{
+    display:flex;
+    gap:5px;
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+    .week-grid{
+        grid-template-columns:repeat(4,1fr);
+    }
+
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:560px){
+    .app{padding:12px 10px 90px}
+
+    .brand h1{font-size:17px}
+
+    .nav{
+        grid-template-columns:repeat(5,1fr);
+        overflow-x:auto;
+    }
+
+    .nav button{
+        font-size:9px;
+        min-width:65px;
+    }
+
+    .day-title h2{font-size:20px}
+
+    .timeline-item{
+        grid-template-columns:52px 12px 1fr;
+        gap:6px;
+    }
+
+    .time{font-size:8px}
+
+    .timeline-card{
+        padding:10px;
+    }
+
+    .activity-actions{
+        flex-direction:column;
+    }
+
+    .subject-list{
+        grid-template-columns:1fr;
+    }
+
+    .week-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .timer{
+        font-size:48px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="topbar">
+    <div class="brand">
+        <div class="brand-icon">📚</div>
+        <div>
+            <h1>StudyTune</h1>
+            <p>برنامه‌ریز هوشمند مطالعه کنکور</p>
+        </div>
+    </div>
+
+    <div class="top-actions">
+        <button class="icon-btn" id="todayBtn">⌂</button>
+    </div>
+</header>
+
+<nav class="nav">
+    <button class="active" data-page="today">امروز</button>
+    <button data-page="week">هفته</button>
+    <button data-page="timer">تایمر</button>
+    <button data-page="stats">آمار</button>
+    <button data-page="subjects">درس‌ها</button>
+</nav>
+
+<!-- TODAY -->
+
+<section class="page active" id="page-today">
+
+    <div class="day-header">
+        <div class="day-title">
+            <h2 id="dayTitle">امروز</h2>
+            <p id="dayDate"></p>
+        </div>
+
+        <div class="date-actions">
+            <button id="prevDay">‹</button>
+            <button id="nextDay">›</button>
+        </div>
+    </div>
+
+    <div class="daily-progress">
+        <div class="progress-head">
+            <strong>پیشرفت برنامه امروز</strong>
+            <span id="dailyPercent">۰٪</span>
+        </div>
+
+        <div class="progress">
+            <div id="dailyProgress"></div>
+        </div>
+    </div>
+
+    <div class="timeline" id="timeline"></div>
+
+</section>
+
+<!-- WEEK -->
+
+<section class="page" id="page-week">
+
+    <div class="card">
+        <div class="card-title">
+            <h2>📅 برنامه هفتگی</h2>
+            <span id="weekRange"></span>
+        </div>
+
+        <div class="week-grid" id="weekGrid"></div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            <h2>🔄 روتین‌ها</h2>
+            <button class="small-btn" id="addRoutineBtn">＋</button>
+        </div>
+
+        <div id="routineList"></div>
+    </div>
+
+</section>
+
+<!-- TIMER -->
+
+<section class="page" id="page-timer">
+
+    <div class="card timer-box">
+
+        <div class="timer-subject" id="timerSubject">
+            هنوز جلسه‌ای انتخاب نشده
+        </div>
+
+        <div class="timer" id="timer">
+            00:00:00
+        </div>
+
+        <div class="timer-status" id="timerStatus">
+            آماده شروع مطالعه
+        </div>
+
+        <div class="timer-actions">
+            <button class="timer-start" id="timerStart">
+                ▶ شروع
+            </button>
+
+            <button class="timer-stop" id="timerStop">
+                ■ پایان
+            </button>
+        </div>
+
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            <h2>🎯 هدف امروز</h2>
+        </div>
+
+        <div class="goal">
+            <div class="goal-head">
+                <strong>ساعت مطالعه</strong>
+                <span id="timerGoalText">۰ / ۶۰ دقیقه</span>
+            </div>
+
+            <div class="goal-bar">
+                <div class="goal-fill" id="timerGoal"></div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- STATS -->
+
+<section class="page" id="page-stats">
+
+    <div class="stats-grid">
+
+        <div class="stat">
+            <div class="stat-icon">⏱️</div>
+            <strong class="stat-value" id="statMinutes">۰</strong>
+            <span class="stat-label">دقیقه مطالعه</span>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">📚</div>
+            <strong class="stat-value" id="statSessions">۰</strong>
+            <span class="stat-label">جلسه</span>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">✅</div>
+            <strong class="stat-value" id="statCompleted">۰٪</strong>
+            <span class="stat-label">پایبندی</span>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">🔥</div>
+            <strong class="stat-value" id="statDays">۰</strong>
+            <span class="stat-label">روز فعال</span>
+        </div>
+
+    </div>
+
+    <div class="card" style="margin-top:14px">
+        <div class="card-title">
+            <h2>📈 ساعات مطالعه</h2>
+            <span>۷ روز اخیر</span>
+        </div>
+
+        <div class="chart" id="chart"></div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            <h2>🎯 اهداف</h2>
+        </div>
+
+        <div class="goal">
+            <div class="goal-head">
+                <strong>هدف روزانه</strong>
+                <span id="dailyGoalText"></span>
+            </div>
+
+            <div class="goal-bar">
+                <div class="goal-fill" id="dailyGoal"></div>
+            </div>
+        </div>
+
+        <div class="goal">
+            <div class="goal-head">
+                <strong>هدف هفتگی</strong>
+                <span id="weeklyGoalText"></span>
+            </div>
+
+            <div class="goal-bar">
+                <div class="goal-fill" id="weeklyGoal"></div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- SUBJECTS -->
+
+<section class="page" id="page-subjects">
+
+    <div class="card">
+        <div class="card-title">
+            <h2>📚 درس‌های من</h2>
+            <button class="small-btn" id="addSubjectBtn">＋</button>
+        </div>
+
+        <div class="subject-list" id="subjectList"></div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            <h2>📊 زمان مطالعه هر درس</h2>
+        </div>
+
+        <div id="subjectStats"></div>
+    </div>
+
+</section>
+
+<button class="fab" id="fab">＋</button>
+
+</div>
+
+<!-- ACTIVITY MODAL -->
+
+<div class="modal" id="activityModal">
+
+<div class="modal-box">
+
+    <div class="modal-head">
+        <h2 id="activityModalTitle">افزودن فعالیت</h2>
+        <button class="close" data-close="activityModal">×</button>
+    </div>
+
+    <form id="activityForm">
+
+        <input type="hidden" id="editId">
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label>تاریخ</label>
+                <input type="date" id="fDate" required>
+            </div>
+
+            <div class="field">
+                <label>درس</label>
+                <select id="fSubject" required></select>
+            </div>
+
+            <div class="field">
+                <label>مبحث</label>
+                <input id="fTopic" placeholder="مثلاً تابع">
+            </div>
+
+            <div class="field">
+                <label>ساعت شروع</label>
+                <input type="time" id="fStart" required>
+            </div>
+
+            <div class="field">
+                <label>مدت مطالعه</label>
+                <input type="number" id="fDuration" min="1" max="1440" value="60" required>
+            </div>
+
+            <div class="field">
+                <label>تکرار</label>
+                <select id="fRepeat">
+                    <option value="none">بدون تکرار</option>
+                    <option value="daily">هر روز</option>
+                    <option value="weekly">هر هفته</option>
+                </select>
+            </div>
+
+            <div class="field full">
+                <label>یادداشت</label>
+                <textarea id="fNote" placeholder="یادداشت جلسه..."></textarea>
+            </div>
+
+        </div>
+
+        <button class="save-btn">ذخیره فعالیت</button>
+
+    </form>
+
+</div>
+</div>
+
+<!-- SUBJECT MODAL -->
+
+<div class="modal" id="subjectModal">
+
+<div class="modal-box">
+
+    <div class="modal-head">
+        <h2>افزودن درس</h2>
+        <button class="close" data-close="subjectModal">×</button>
+    </div>
+
+    <form id="subjectForm">
+
+        <div class="field">
+            <label>نام درس</label>
+            <input id="subjectName" placeholder="مثلاً ریاضی" required>
+        </div>
+
+        <div class="field" style="margin-top:12px">
+            <label>رنگ</label>
+            <input type="color" id="subjectColor" value="#7c3aed">
+        </div>
+
+        <button class="save-btn">افزودن درس</button>
+
+    </form>
+
+</div>
+</div>
+
+<!-- ROUTINE MODAL -->
+
+<div class="modal" id="routineModal">
+
+<div class="modal-box">
+
+    <div class="modal-head">
+        <h2>ساخت روتین</h2>
+        <button class="close" data-close="routineModal">×</button>
+    </div>
+
+    <form id="routineForm">
+
+        <div class="field">
+            <label>نام روتین</label>
+            <input id="routineName" placeholder="مثلاً روتین صبح" required>
+        </div>
+
+        <div class="field" style="margin-top:12px">
+            <label>روزهای اجرا</label>
+            <select id="routineDays" multiple style="height:130px">
+                <option value="1">شنبه</option>
+                <option value="2">یکشنبه</option>
+                <option value="3">دوشنبه</option>
+                <option value="4">سه‌شنبه</option>
+                <option value="5">چهارشنبه</option>
+                <option value="6">پنجشنبه</option>
+                <option value="0">جمعه</option>
+            </select>
+        </div>
+
+        <button class="save-btn">ساخت روتین</button>
+
+    </form>
+
+</div>
+</div>
+
+<script>
+"use strict";
+
+/* =========================
+   STORAGE
+========================= */
+
+const STORAGE_KEY="studyTuneData";
+
+const defaultData={
+    subjects:[
+        {id:"math",name:"ریاضی",color:"#8b5cf6"},
+        {id:"physics",name:"فیزیک",color:"#06b6d4"},
+        {id:"chemistry",name:"شیمی",color:"#22c55e"},
+        {id:"biology",name:"زیست",color:"#ec4899"}
+    ],
+    tasks:[],
+    routines:[],
+    settings:{
+        dailyGoal:60,
+        weeklyGoal:420
+    }
+};
+
+let data;
+
+try{
+    data=JSON.parse(localStorage.getItem(STORAGE_KEY))||defaultData;
+}catch{
+    data=defaultData;
+}
+
+data.subjects ||= [];
+data.tasks ||= [];
+data.routines ||= [];
+data.settings ||= defaultData.settings;
+
+function save(){
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+}
+
+/* =========================
+   DATE
+========================= */
+
+let selectedDate=new Date();
+
+function pad(n){
+    return String(n).padStart(2,"0");
+}
+
+function dateKey(date){
+    return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`;
+}
+
+function parseKey(key){
+    const [y,m,d]=key.split("-").map(Number);
+    return new Date(y,m-1,d);
+}
+
+function faDate(date){
+    return new Intl.DateTimeFormat("fa-IR",{
+        weekday:"long",
+        day:"numeric",
+        month:"long"
+    }).format(date);
+}
+
+function todayKey(){
+    return dateKey(new Date());
+}
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const $=id=>document.getElementById(id);
+
+const pages=document.querySelectorAll(".page");
+const navButtons=document.querySelectorAll(".nav button");
+
+/* =========================
+   NAVIGATION
+========================= */
+
+navButtons.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+        const page=btn.dataset.page;
+
+        navButtons.forEach(x=>x.classList.remove("active"));
+        btn.classList.add("active");
+
+        pages.forEach(x=>x.classList.remove("active"));
+        $("page-"+page).classList.add("active");
+
+        if(page==="today") renderToday();
+        if(page==="week") renderWeek();
+        if(page==="stats") renderStats();
+        if(page==="subjects") renderSubjects();
+    });
+});
+
+$("todayBtn").addEventListener("click",()=>{
+    selectedDate=new Date();
+    openPage("today");
+});
+
+function openPage(page){
+    const btn=document.querySelector(`[data-page="${page}"]`);
+    if(btn)btn.click();
+}
+
+/* =========================
+   SUBJECTS
+========================= */
+
+function subjectName(id){
+    return data.subjects.find(s=>s.id===id)?.name||"درس حذف‌شده";
+}
+
+function subjectColor(id){
+    return data.subjects.find(s=>s.id===id)?.color||"#7c3aed";
+}
+
+function renderSubjectOptions(){
+    $("fSubject").innerHTML=data.subjects.map(s=>
+        `<option value="${s.id}">${escapeHTML(s.name)}</option>`
+    ).join("");
+}
+
+function escapeHTML(value){
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+/* =========================
+   ACTIVITY HELPERS
+========================= */
+
+function taskEnd(task){
+    const [h,m]=task.start.split(":").map(Number);
+    const total=h*60+m+Number(task.duration);
+    return `${pad(Math.floor(total/60)%24)}:${pad(total%60)}`;
+}
+
+function tasksForDate(key){
+    return data.tasks
+        .filter(t=>t.date===key)
+        .sort((a,b)=>a.start.localeCompare(b.start));
+}
+
+function totalMinutes(tasks){
+    return tasks.reduce((sum,t)=>sum+Number(t.duration||0),0);
+}
+
+/* =========================
+   TODAY
+========================= */
+
+function renderToday(){
+
+    const key=dateKey(selectedDate);
+    const tasks=tasksForDate(key);
+
+    $("dayTitle").textContent=
+        key===todayKey()?"امروز":faDate(selectedDate);
+
+    $("dayDate").textContent=
+        new Intl.DateTimeFormat("fa-IR",{
+            year:"numeric",
+            month:"long",
+            day:"numeric"
+        }).format(selectedDate);
+
+    const completed=tasks.filter(t=>t.done).length;
+
+    const percent=tasks.length
+        ?Math.round(completed/tasks.length*100)
+        :0;
+
+    $("dailyPercent").textContent=percent+"٪";
+    $("dailyProgress").style.width=percent+"%";
+
+    const timeline=$("timeline");
+
+    if(!tasks.length){
+        timeline.innerHTML=`
+            <div class="empty">
+                <div class="empty-icon">📅</div>
+                <strong>برای این روز برنامه‌ای نداری</strong>
+                <p style="margin-top:7px;font-size:10px">
+                    با دکمه + اولین جلسه مطالعه را اضافه کن.
+                </p>
+            </div>
+        `;
+        return;
+    }
+
+    timeline.innerHTML=tasks.map(task=>{
+
+        const color=subjectColor(task.subject);
+
+        return `
+        <div class="timeline-item ${task.done?"done":""}">
+
+            <div class="time">${escapeHTML(task.start)}</div>
+
+            <div class="line">
+                <div class="dot" style="background:${color}"></div>
+            </div>
+
+            <div class="timeline-card"
+                 style="border-right-color:${color}">
+
+                <div class="activity-main">
+
+                    <div class="activity-title">
+                        ${escapeHTML(subjectName(task.subject))}
+                    </div>
+
+                    ${task.topic?
+                    `<div class="activity-topic">
+                        ${escapeHTML(task.topic)}
+                    </div>`:""}
+
+                    <div class="activity-meta">
+                        <span class="badge">
+                            ⏱ ${task.duration} دقیقه
+                        </span>
+
+                        <span class="badge">
+                            تا ${taskEnd(task)}
+                        </span>
+
+                        ${task.note?
+                        `<span class="badge">📝 یادداشت</span>`:""}
+                    </div>
+
+                </div>
+
+                <div class="activity-actions">
+
+                    <button class="small-btn start"
+                        title="شروع تایمر"
+                        onclick="startTaskTimer('${task.id}')">
+                        ▶
+                    </button>
+
+                    <button class="small-btn"
+                        title="تغییر وضعیت"
+                        onclick="toggleTask('${task.id}')">
+                        ${task.done?"↩":"✓"}
+                    </button>
+
+                    <button class="small-btn"
+                        title="ویرایش"
+                        onclick="editTask('${task.id}')">
+                        ✎
+                    </button>
+
+                    <button class="small-btn delete"
+                        title="حذف"
+                        onclick="deleteTask('${task.id}')">
+                        🗑
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+        `;
+    }).join("");
+}
+
+/* =========================
+   TASK ACTIONS
+========================= */
+
+window.toggleTask=function(id){
+
+    const task=data.tasks.find(t=>t.id===id);
+    if(!task)return;
+
+    task.done=!task.done;
+
+    save();
+    renderToday();
+    renderStats();
+};
+
+window.deleteTask=function(id){
+
+    if(!confirm("این فعالیت حذف شود؟"))return;
+
+    data.tasks=data.tasks.filter(t=>t.id!==id);
+
+    save();
+    renderToday();
+    renderWeek();
+};
+
+window.editTask=function(id){
+
+    const task=data.tasks.find(t=>t.id===id);
+    if(!task)return;
+
+    $("editId").value=task.id;
+    $("fDate").value=task.date;
+    $("fSubject").value=task.subject;
+    $("fTopic").value=task.topic||"";
+    $("fStart").value=task.start;
+    $("fDuration").value=task.duration;
+    $("fRepeat").value=task.repeat||"none";
+    $("fNote").value=task.note||"";
+
+    $("activityModalTitle").textContent="ویرایش فعالیت";
+
+    showModal("activityModal");
+};
+
+/* =========================
+   ACTIVITY FORM
+========================= */
+
+$("activityForm").addEventListener("submit",e=>{
+
+    e.preventDefault();
+
+    const id=$("editId").value;
+
+    const task={
+        id:id||crypto.randomUUID(),
+        date:$("fDate").value,
+        subject:$("fSubject").value,
+        topic:$("fTopic").value.trim(),
+        start:$("fStart").value,
+        duration:Math.max(1,Math.min(1440,Number($("fDuration").value))),
+        repeat:$("fRepeat").value,
+        note:$("fNote").value.trim(),
+        done:id
+            ?(data.tasks.find(t=>t.id===id)?.done||false)
+            :false
+    };
+
+    if(!task.date||!task.start||!task.subject)return;
+
+    if(id){
+
+        const index=data.tasks.findIndex(t=>t.id===id);
+
+        if(index>=0)data.tasks[index]=task;
+
+    }else{
+
+        data.tasks.push(task);
+
+        /*
+         * ایجاد برنامه‌های تکرارشونده
+         */
+
+        if(task.repeat==="daily"){
+
+            for(let i=1;i<=30;i++){
+
+                const d=parseKey(task.date);
+                d.setDate(d.getDate()+i);
+
+                data.tasks.push({
+                    ...task,
+                    id:crypto.randomUUID(),
+                    date:dateKey(d),
+                    repeat:"generated",
+                    done:false
+                });
+            }
+        }
+
+        if(task.repeat==="weekly"){
+
+            for(let i=1;i<=12;i++){
+
+                const d=parseKey(task.date);
+                d.setDate(d.getDate()+i*7);
+
+                data.tasks.push({
+                    ...task,
+                    id:crypto.randomUUID(),
+                    date:dateKey(d),
+                    repeat:"generated",
+                    done:false
+                });
+            }
+        }
+    }
+
+    save();
+
+    hideModal("activityModal");
+
+    resetActivityForm();
+
+    renderAll();
+});
+
+/* =========================
+   RESET
+========================= */
+
+function resetActivityForm(){
+
+    $("activityForm").reset();
+    $("editId").value="";
+    $("fDate").value=dateKey(selectedDate);
+    $("fDuration").value=60;
+    $("activityModalTitle").textContent="افزودن فعالیت";
+}
+
+/* =========================
+   FAB
+========================= */
+
+$("fab").addEventListener("click",()=>{
+    resetActivityForm();
+    showModal("activityModal");
+});
+
+/* =========================
+   DAY NAVIGATION
+========================= */
+
+$("prevDay").addEventListener("click",()=>{
+    selectedDate.setDate(selectedDate.getDate()-1);
+    renderToday();
+});
+
+$("nextDay").addEventListener("click",()=>{
+    selectedDate.setDate(selectedDate.getDate()+1);
+    renderToday();
+});
+
+/* =========================
+   WEEK
+========================= */
+
+function mondayOfWeek(date){
+
+    const d=new Date(date);
+    const day=d.getDay();
+
+    const diff=day===0?-6:1-day;
+
+    d.setDate(d.getDate()+diff);
+
+    return d;
+}
+
+function renderWeek(){
+
+    const monday=mondayOfWeek(selectedDate);
+
+    const names=[
+        "شنبه",
+        "یکشنبه",
+        "دوشنبه",
+        "سه‌شنبه",
+        "چهارشنبه",
+        "پنجشنبه",
+        "جمعه"
+    ];
+
+    const grid=$("weekGrid");
+
+    grid.innerHTML="";
+
+    for(let i=0;i<7;i++){
+
+        const d=new Date(monday);
+        d.setDate(monday.getDate()+i);
+
+        const key=dateKey(d);
+        const tasks=tasksForDate(key);
+
+        const selected=
+            key===dateKey(selectedDate);
+
+        const div=document.createElement("div");
+
+        div.className=
+            "week-day"+(selected?" active":"");
+
+        div.innerHTML=`
+            <div class="week-day-name">${names[i]}</div>
+            <div class="week-day-number">
+                ${d.getDate()}
+            </div>
+
+            ${tasks.slice(0,3).map(t=>
+                `<div class="week-task"
+                    style="border-right:2px solid ${subjectColor(t.subject)}">
+                    ${escapeHTML(subjectName(t.subject))}
+                </div>`
+            ).join("")}
+
+            ${tasks.length>3?
+                `<div style="color:#64748b;font-size:8px">
+                    +${tasks.length-3} بیشتر
+                </div>`:""}
+        `;
+
+        div.addEventListener("click",()=>{
+            selectedDate=d;
+            openPage("today");
+        });
+
+        grid.appendChild(div);
+    }
+
+    $("weekRange").textContent=
+        `${faDate(monday)} تا ${faDate(new Date(monday.getFullYear(),monday.getMonth(),monday.getDate()+6))}`;
+
+    renderRoutines();
+}
+
+/* =========================
+   ROUTINES
+========================= */
+
+function renderRoutines(){
+
+    const list=$("routineList");
+
+    if(!data.routines.length){
+
+        list.innerHTML=`
+            <div class="empty">
+                هنوز روتینی ساخته نشده.
+            </div>
+        `;
+
+        return;
+    }
+
+    const dayNames=[
+        "جمعه",
+        "شنبه",
+        "یکشنبه",
+        "دوشنبه",
+        "سه‌شنبه",
+        "چهارشنبه",
+        "پنجشنبه"
+    ];
+
+    list.innerHTML=data.routines.map(r=>`
+
+        <div class="routine">
+
+            <div class="routine-info">
+                <strong>🔄 ${escapeHTML(r.name)}</strong>
+
+                <span>
+                    ${r.days.map(d=>dayNames[d]).join("، ")}
+                </span>
+            </div>
+
+            <div class="routine-actions">
+                <button class="small-btn delete"
+                    onclick="deleteRoutine('${r.id}')">
+                    🗑
+                </button>
+            </div>
+
+        </div>
+
+    `).join("");
+}
+
+window.deleteRoutine=function(id){
+
+    if(!confirm("این روتین حذف شود؟"))return;
+
+    data.routines=data.routines.filter(r=>r.id!==id);
+
+    save();
+    renderRoutines();
+};
+
+$("addRoutineBtn").addEventListener("click",()=>{
+    $("routineForm").reset();
+    showModal("routineModal");
+});
+
+$("routineForm").addEventListener("submit",e=>{
+
+    e.preventDefault();
+
+    const days=[...$("routineDays").selectedOptions]
+        .map(x=>Number(x.value));
+
+    if(!days.length){
+
+        alert("حداقل یک روز را انتخاب کن.");
+        return;
+    }
+
+    data.routines.push({
+        id:crypto.randomUUID(),
+        name:$("routineName").value.trim(),
+        days
+    });
+
+    save();
+
+    hideModal("routineModal");
+
+    renderRoutines();
+});
+
+/* =========================
+   TIMER
+========================= */
+
+let timerSeconds=0;
+let timerInterval=null;
+let timerTaskId=null;
+
+function updateTimer(){
+
+    const h=Math.floor(timerSeconds/3600);
+    const m=Math.floor((timerSeconds%3600)/60);
+    const s=timerSeconds%60;
+
+    $("timer").textContent=
+        `${pad(h)}:${pad(m)}:${pad(s)}`;
+
+    const todayMinutes=Math.floor(timerSeconds/60);
+
+    const current=tasksForDate(todayKey());
+
+    const logged=totalMinutes(
+        current.filter(t=>t.done)
+    );
+
+    const total=Math.min(
+        100,
+        Math.round(
+            ((logged+todayMinutes)/
+            data.settings.dailyGoal)*100
+        )
+    );
+
+    $("timerGoal").style.width=total+"%";
+
+    $("timerGoalText").textContent=
+        `${logged+todayMinutes} / ${data.settings.dailyGoal} دقیقه`;
+}
+
+$("timerStart").addEventListener("click",()=>{
+
+    if(timerInterval)return;
+
+    timerInterval=setInterval(()=>{
+
+        timerSeconds++;
+
+        updateTimer();
+
+    },1000);
+
+    $("timerStatus").textContent="در حال مطالعه...";
+
+});
+
+$("timerStop").addEventListener("click",()=>{
+
+    stopTimer(true);
+
+});
+
+function stopTimer(saveSession){
+
+    if(timerInterval){
+
+        clearInterval(timerInterval);
+        timerInterval=null;
+    }
+
+    if(saveSession&&timerSeconds>=60){
+
+        const minutes=Math.floor(timerSeconds/60);
+
+        data.tasks.push({
+            id:crypto.randomUUID(),
+            date:todayKey(),
+            subject:data.subjects[0]?.id||"general",
+            topic:"جلسه تایمر",
+            start:new Date().toTimeString().slice(0,5),
+            duration:minutes,
+            repeat:"none",
+            note:"ثبت‌شده توسط تایمر",
+            done:true
+        });
+
+        save();
+
+    }
+
+    timerSeconds=0;
+
+    $("timerStatus").textContent="آماده شروع مطالعه";
+
+    updateTimer();
+
+    renderAll();
+}
+
+window.startTaskTimer=function(id){
+
+    const task=data.tasks.find(t=>t.id===id);
+    if(!task)return;
+
+    timerTaskId=id;
+
+    timerSeconds=0;
+
+    $("timerSubject").textContent=
+        `${subjectName(task.subject)} — ${task.topic||"مطالعه"}`;
+
+    openPage("timer");
+
+    updateTimer();
+};
+
+/* =========================
+   STATS
+========================= */
+
+function renderStats(){
+
+    const total=totalMinutes(data.tasks);
+
+    const sessions=data.tasks.length;
+
+    const completed=data.tasks.filter(t=>t.done).length;
+
+    const adherence=sessions
+        ?Math.round(completed/sessions*100)
+        :0;
+
+    const days=new Set(
+        data.tasks
+            .filter(t=>Number(t.duration)>0)
+            .map(t=>t.date)
+    ).size;
+
+    $("statMinutes").textContent=formatMinutes(total);
+    $("statSessions").textContent=sessions;
+    $("statCompleted").textContent=adherence+"٪";
+    $("statDays").textContent=days;
+
+    renderChart();
+    renderGoals();
+}
+
+function formatMinutes(min){
+
+    min=Math.round(min);
+
+    if(min<60)return `${min} دقیقه`;
+
+    const h=Math.floor(min/60);
+    const m=min%60;
+
+    return m
+        ?`${h}س ${m}د`
+        :`${h} ساعت`;
+}
+
+function renderChart(){
+
+    const chart=$("chart");
+
+    chart.innerHTML="";
+
+    const values=[];
+
+    for(let i=6;i>=0;i--){
+
+        const d=new Date();
+
+        d.setDate(d.getDate()-i);
+
+        const key=dateKey(d);
+
+        const minutes=totalMinutes(
+            tasksForDate(key)
+        );
+
+        values.push({
+            key,
+            date:d,
+            minutes
+        });
+    }
+
+    const max=Math.max(
+        data.settings.dailyGoal,
+        ...values.map(x=>x.minutes),
+        1
+    );
+
+    values.forEach(x=>{
+
+        const item=document.createElement("div");
+
+        item.className="bar-item";
+
+        const bar=document.createElement("div");
+
+        bar.className="bar";
+
+        const fill=document.createElement("div");
+
+        fill.style.height=
+            `${Math.min(100,x.minutes/max*100)}%`;
+
+        bar.appendChild(fill);
+
+        const label=document.createElement("div");
+
+        label.className="bar-label";
+
+        label.textContent=
+            new Intl.DateTimeFormat("fa-IR",{
+                weekday:"short"
+            }).format(x.date);
+
+        item.appendChild(bar);
+        item.appendChild(label);
+
+        chart.appendChild(item);
+    });
+}
+
+function renderGoals(){
+
+    const today=totalMinutes(
+        tasksForDate(todayKey())
+    );
+
+    const monday=mondayOfWeek(new Date());
+
+    let week=0;
+
+    for(let i=0;i<7;i++){
+
+        const d=new Date(monday);
+        d.setDate(monday.getDate()+i);
+
+        week+=totalMinutes(
+            tasksForDate(dateKey(d))
+        );
+    }
+
+    const dp=Math.min(
+        100,
+        today/data.settings.dailyGoal*100
+    );
+
+    const wp=Math.min(
+        100,
+        week/data.settings.weeklyGoal*100
+    );
+
+    $("dailyGoal").style.width=dp+"%";
+    $("weeklyGoal").style.width=wp+"%";
+
+    $("dailyGoalText").textContent=
+        `${today} / ${data.settings.dailyGoal} دقیقه`;
+
+    $("weeklyGoalText").textContent=
+        `${week} / ${data.settings.weeklyGoal} دقیقه`;
+}
+
+/* =========================
+   SUBJECTS
+========================= */
+
+function renderSubjects(){
+
+    const list=$("subjectList");
+
+    list.innerHTML=data.subjects.map(s=>{
+
+        const minutes=totalMinutes(
+            data.tasks.filter(t=>t.subject===s.id)
+        );
+
+        return `
+            <div class="subject-card">
+
+                <div class="subject-color"
+                     style="background:${s.color}">
+                </div>
+
+                <div class="subject-info">
+                    <strong>${escapeHTML(s.name)}</strong>
+                    <span>${formatMinutes(minutes)}</span>
+                </div>
+
+                <div class="subject-actions">
+                    <button class="small-btn delete"
+                        onclick="deleteSubject('${s.id}')">
+                        🗑
+                    </button>
+                </div>
+
+            </div>
+        `;
+
+    }).join("");
+
+    renderSubjectStats();
+}
+
+function renderSubjectStats(){
+
+    const box=$("subjectStats");
+
+    if(!data.subjects.length){
+
+        box.innerHTML=
+            `<div class="empty">درسی وجود ندارد.</div>`;
+
+        return;
+    }
+
+    const values=data.subjects.map(s=>({
+        ...s,
+        minutes:totalMinutes(
+            data.tasks.filter(t=>t.subject===s.id)
+        )
+    }));
+
+    const max=Math.max(
+        1,
+        ...values.map(x=>x.minutes)
+    );
+
+    box.innerHTML=values.map(s=>`
+
+        <div class="goal">
+
+            <div class="goal-head">
+
+                <strong>
+                    ${escapeHTML(s.name)}
+                </strong>
+
+                <span>
+                    ${formatMinutes(s.minutes)}
+                </span>
+
+            </div>
+
+            <div class="goal-bar">
+                <div
+                    class="goal-fill"
+                    style="
+                        width:${s.minutes/max*100}%;
+                        background:${s.color}
+                    "
+                ></div>
+            </div>
+
+        </div>
+
+    `).join("");
+}
+
+window.deleteSubject=function(id){
+
+    if(data.subjects.length<=1){
+
+        alert("حداقل یک درس باید وجود داشته باشد.");
+        return;
+    }
+
+    if(!confirm("این درس حذف شود؟"))return;
+
+    data.subjects=
+        data.subjects.filter(s=>s.id!==id);
+
+    save();
+
+    renderSubjects();
+    renderSubjectOptions();
+};
+
+/* =========================
+   SUBJECT FORM
+========================= */
+
+$("addSubjectBtn").addEventListener("click",()=>{
+    $("subjectForm").reset();
+    $("subjectColor").value="#7c3aed";
+    showModal("subjectModal");
+});
+
+$("subjectForm").addEventListener("submit",e=>{
+
+    e.preventDefault();
+
+    const name=$("subjectName").value.trim();
+
+    if(!name)return;
+
+    data.subjects.push({
+        id:crypto.randomUUID(),
+        name,
+        color:$("subjectColor").value
+    });
+
+    save();
+
+    hideModal("subjectModal");
+
+    renderSubjects();
+    renderSubjectOptions();
+});
+
+/* =========================
+   MODALS
+========================= */
+
+function showModal(id){
+    $(id).classList.add("show");
+}
+
+function hideModal(id){
+    $(id).classList.remove("show");
+}
+
+document.querySelectorAll("[data-close]").forEach(btn=>{
+
+    btn.addEventListener("click",()=>{
+        hideModal(btn.dataset.close);
+    });
+
+});
+
+document.querySelectorAll(".modal").forEach(modal=>{
+
+    modal.addEventListener("click",e=>{
+
+        if(e.target===modal){
+            modal.classList.remove("show");
+        }
+
+    });
+
+});
+
+/* =========================
+   RENDER ALL
+========================= */
+
+function renderAll(){
+
+    renderSubjectOptions();
+    renderToday();
+    renderWeek();
+    renderStats();
+    renderSubjects();
+    updateTimer();
+}
+
+/* =========================
+   INITIAL
+========================= */
+
+$("fDate").value=todayKey();
+
+renderAll();
+
+</script>
+
+</body>
+  </html>
