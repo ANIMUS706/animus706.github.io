@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>برنامه مطالعه کنکور</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>📚 برنامه مطالعه کنکور</h1>
+            <p>برنامه هفتگی از شنبه تا جمعه</p>
+        </header>
+
+        <!-- فرم اضافه کردن برنامه -->
+        <section class="add-section">
+
+            <h2>➕ اضافه کردن مطالعه</h2>
+
+            <form id="studyForm">
+
+                <div class="form-group">
+                    <label for="day">روز</label>
+
+                    <select id="day" required>
+                        <option value="شنبه">شنبه</option>
+                        <option value="یکشنبه">یکشنبه</option>
+                        <option value="دوشنبه">دوشنبه</option>
+                        <option value="سه‌شنبه">سه‌شنبه</option>
+                        <option value="چهارشنبه">چهارشنبه</option>
+                        <option value="پنجشنبه">پنجشنبه</option>
+                        <option value="جمعه">جمعه</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">درس</label>
+
+                    <input
+                        type="text"
+                        id="subject"
+                        placeholder="مثلاً ریاضی"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="topic">مبحث</label>
+
+                    <input
+                        type="text"
+                        id="topic"
+                        placeholder="مثلاً تابع"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="hours">ساعت مطالعه</label>
+
+                    <input
+                        type="number"
+                        id="hours"
+                        min="0.5"
+                        step="0.5"
+                        placeholder="مثلاً 2"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="time">ساعت شروع</label>
+
+                    <input
+                        type="time"
+                        id="time"
+                    >
+                </div>
+
+                <button type="submit" class="add-btn">
+                    افزودن به برنامه
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- آمار -->
+        <section class="stats">
+
+            <div class="stat-card">
+                <span>📖</span>
+                <strong id="totalSubjects">0</strong>
+                <p>کل مطالعه‌ها</p>
+            </div>
+
+            <div class="stat-card">
+                <span>✅</span>
+                <strong id="completedSubjects">0</strong>
+                <p>انجام شده</p>
+            </div>
+
+            <div class="stat-card">
+                <span>⏱️</span>
+                <strong id="totalHours">0</strong>
+                <p>ساعت مطالعه</p>
+            </div>
+
+            <div class="stat-card">
+                <span>📊</span>
+                <strong id="progressPercent">0%</strong>
+                <p>پیشرفت</p>
+            </div>
+
+        </section>
+
+
+        <!-- برنامه هفتگی -->
+        <section class="schedule-section">
+
+            <h2>🗓️ برنامه هفتگی</h2>
+
+            <div id="schedule">
+
+                <!-- شنبه -->
+                <div class="day-card" data-day="شنبه">
+                    <div class="day-header">
+                        <h3>شنبه</h3>
+                        <span class="day-hours">0 ساعت</span>
+                    </div>
+
+                    <div class="tasks"></div>
+                </div>
+
+
+                <!-- یکشنبه -->
+                <div class="day-card" data-day="یکشنبه">
+                    <div class="day-header">
+                        <h3>یکشنبه</h3>
+                        <span class="day-hours">0 ساعت</span>
+                    </div>
+
+                    <div class="tasks"></div>
+                </div>
+
+
+                <!-- دوشنبه -->
+                <div class="day-card" data-day="دوشنبه">
+                    <div class="day-header">
+                        <h3>دوشنبه</h3>
+                        <span class="day-hours">0 ساعت</span>
+                    </div>
+
+                    <div class="tasks"></div>
+                </div>
+
+
+                <!-- سه شنبه -->
+                <div class="day-card" data-day="سه‌شنبه">
+                    <div class="day-header">
+                        <h3>سه‌شنبه</h3>
+                        <span class="day-hours">0 ساعت</span>
+                    </div>
+
+                    <div class="tasks"></div>
+                </div>
+
+
+                <!-- چهارشنبه -->
+                <div class="day-card" data-day="چهارشنبه">
+                    <div class="day-header">
+                        <h3>چهارشنبه</h3>
+                        <span class="day-hours">0 ساعت</span>
+                    </div>
+
+                    <div class="tasks"></div>
+                </div>
+
+
+                <!-- پنجشنبه -->
+                <div class="day-card" data-day="پنجشنبه">
+                    <div class="day-header">
+                        <h3>پنجشنبه</h3>
+                        <span class="day-hours">0 ساعت</span>
+                    </div>
+
+                    <div class="tasks"></div>
+                </div>
+
+
+                <!-- جمعه -->
+                <div class="day-card" data-day="جمعه">
+                    <div class="day-header">
+                        <h3>جمعه</h3>
+                        <span class="day-hours">0 ساعت</span>
+                    </div>
+
+                    <div class="tasks"></div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- دکمه پاک کردن -->
+        <button id="clearAll" class="clear-btn">
+            🗑️ پاک کردن کل برنامه
+        </button>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+  </html>
