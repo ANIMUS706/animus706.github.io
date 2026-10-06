@@ -3,1211 +3,789 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>StudyTune | برنامه‌ریز مطالعه کنکور</title>
+<meta name="theme-color" content="#7c3aed">
+
+<title>StudyTune | برنامه‌ریز هوشمند کنکور</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-<style>
-:root{
- --bg:#070b16;--panel:#101827;--panel2:#0c1422;--text:#f8fafc;
- --muted:#8fa0b8;--border:rgba(255,255,255,.08);
- --primary:#7c3aed;--primary2:#4f46e5;--cyan:#06b6d4;
- --green:#22c55e;--red:#ef4444;--radius:20px
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{
- font-family:"Vazirmatn",Tahoma,sans-serif;color:var(--text);min-height:100vh;
- background:radial-gradient(circle at 10% 0%,rgba(124,58,237,.18),transparent 30%),
- radial-gradient(circle at 90% 15%,rgba(6,182,212,.12),transparent 25%),var(--bg)
-}
-button,input,select,textarea{font-family:inherit}
-button{cursor:pointer}
-.app{width:min(1250px,100%);margin:auto;padding:18px 15px 100px}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:8px 0 20px}
-.brand{display:flex;align-items:center;gap:12px}
-.brand-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;
- background:linear-gradient(135deg,#7c3aed,#06b6d4);font-size:25px}
-.brand h1{font-size:20px;font-weight:900}
-.brand p{color:var(--muted);font-size:10px;margin-top:2px}
-.icon-btn,.small-btn{border:1px solid var(--border);background:#121c2d;color:white}
-.icon-btn{width:42px;height:42px;border-radius:12px;font-size:17px}
-.nav{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;padding:7px;
- background:rgba(16,24,39,.8);border:1px solid var(--border);border-radius:17px;
- margin-bottom:18px;position:sticky;top:8px;z-index:20;backdrop-filter:blur(20px)}
-.nav button{height:43px;border:0;border-radius:11px;color:var(--muted);background:transparent;font-weight:800;font-size:11px}
-.nav button.active{color:white;background:linear-gradient(135deg,var(--primary),var(--primary2))}
-.page{display:none}.page.active{display:block}
-.day-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
-.day-title h2{font-size:24px;font-weight:900}.day-title p{color:var(--muted);font-size:11px;margin-top:3px}
-.date-actions{display:flex;gap:6px}.date-actions button{height:38px;min-width:38px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:white}
-.daily-progress{background:linear-gradient(135deg,rgba(124,58,237,.18),rgba(6,182,212,.08));
- border:1px solid rgba(124,58,237,.22);border-radius:18px;padding:17px;margin-bottom:17px}
-.progress-head{display:flex;justify-content:space-between;margin-bottom:10px}
-.progress-head strong{font-size:13px}.progress-head span{color:#c4b5fd;font-weight:900;font-size:13px}
-.progress,.goal-bar{height:9px;border-radius:20px;background:#0a101c;overflow:hidden}
-.progress div,.goal-fill{height:100%;width:0;background:linear-gradient(90deg,#7c3aed,#22d3ee);border-radius:inherit;transition:.4s}
-.timeline{display:flex;flex-direction:column;gap:8px}
-.timeline-item{display:grid;grid-template-columns:70px 16px 1fr;gap:10px;min-height:80px}
-.time{text-align:left;color:var(--muted);font-size:10px;padding-top:12px;direction:ltr}
-.line{position:relative}.line:before{content:"";position:absolute;top:0;bottom:-8px;width:2px;background:rgba(148,163,184,.13);right:7px}
-.dot{width:14px;height:14px;border-radius:50%;position:absolute;top:12px;right:0;z-index:2;border:3px solid var(--bg)}
-.timeline-card{background:var(--panel);border:1px solid var(--border);border-right:3px solid var(--primary);
- border-radius:15px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.timeline-item.done .timeline-card{opacity:.65;border-right-color:var(--green)}
-.activity-main{min-width:0}.activity-title{font-size:13px;font-weight:900}
-.activity-topic{color:var(--muted);font-size:10px;margin-top:4px}
-.activity-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
-.badge{background:rgba(124,58,237,.12);color:#c4b5fd;padding:4px 7px;border-radius:7px;font-size:9px}
-.activity-actions{display:flex;gap:5px;flex-shrink:0}
-.small-btn{width:34px;height:34px;border-radius:9px}.small-btn.start{background:rgba(34,197,94,.12);color:#4ade80}
-.small-btn.delete{color:#f87171}
-.empty{padding:45px 20px;text-align:center;color:var(--muted);background:rgba(16,24,39,.55);border:1px dashed var(--border);border-radius:18px}
-.empty-icon{font-size:35px;margin-bottom:8px}
-.fab{position:fixed;left:22px;bottom:22px;width:58px;height:58px;border:0;border-radius:18px;color:white;font-size:25px;
- background:linear-gradient(135deg,var(--primary),var(--primary2));box-shadow:0 15px 35px rgba(124,58,237,.4);z-index:50}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px}
-.card-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}
-.card-title h2{font-size:16px}.card-title span{color:var(--muted);font-size:10px}
-.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.week-day{min-height:110px;border:1px solid var(--border);background:var(--panel2);border-radius:13px;padding:8px;cursor:pointer}
-.week-day.active{border-color:#8b5cf6;background:rgba(124,58,237,.12)}
-.week-day-name{color:var(--muted);font-size:9px;text-align:center}
-.week-day-number{text-align:center;font-size:17px;font-weight:900;margin:5px 0 8px}
-.week-task{background:rgba(124,58,237,.16);border-radius:6px;padding:4px;font-size:8px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.stat{padding:16px 10px;border-radius:15px;background:var(--panel2);border:1px solid var(--border);text-align:center}
-.stat-icon{font-size:21px}.stat-value{display:block;font-size:21px;font-weight:900;margin:5px 0 2px;color:#c4b5fd}
-.stat-label{font-size:9px;color:var(--muted)}
-.subject-filter{display:flex;gap:7px;overflow-x:auto;margin-bottom:14px;padding-bottom:3px}
-.filter-btn{white-space:nowrap;padding:9px 14px;border:1px solid var(--border);border-radius:10px;background:var(--panel2);color:var(--muted);font-weight:800;font-size:10px}
-.filter-btn.active{background:linear-gradient(135deg,var(--primary),var(--primary2));color:white;border-color:transparent}
-.subject-list{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
-.subject-card{display:flex;align-items:center;gap:10px;padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:13px}
-.subject-color{width:11px;height:42px;border-radius:10px}.subject-info{flex:1}
-.subject-info strong{display:block;font-size:12px}.subject-info span{color:var(--muted);font-size:9px}
-.subject-group{font-size:8px;color:#a78bfa;margin-top:3px}.subject-actions{display:flex;gap:4px}
-.goal{margin-bottom:15px}.goal:last-child{margin-bottom:0}.goal-head{display:flex;justify-content:space-between;margin-bottom:7px;font-size:11px}.goal-head span{color:var(--muted)}
-.chart{height:230px;display:flex;align-items:flex-end;gap:8px;overflow-x:auto;padding-top:20px}
-.bar-item{min-width:32px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px}
-.bar{width:24px;height:150px;display:flex;align-items:flex-end;border-radius:7px;overflow:hidden;background:#0b1320}
-.bar div{width:100%;background:linear-gradient(to top,#7c3aed,#22d3ee);border-radius:7px}.bar-label{color:var(--muted);font-size:8px}
-.timer-box{text-align:center;padding:35px 20px}.timer-subject{color:var(--muted);font-size:12px;margin-bottom:10px}
-.timer{font-size:64px;font-weight:900;direction:ltr;letter-spacing:2px;background:linear-gradient(90deg,#c4b5fd,#22d3ee);color:transparent;background-clip:text}
-.timer-status{color:var(--muted);font-size:11px;margin:5px 0 20px}.timer-actions{display:flex;justify-content:center;gap:8px}
-.timer-actions button{min-width:110px;height:46px;border:0;border-radius:12px;color:white;font-weight:800}
-.timer-start{background:linear-gradient(135deg,#7c3aed,#4f46e5)}.timer-stop{background:#172033;border:1px solid var(--border)!important}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:15px;z-index:100}
-.modal.show{display:flex}.modal-box{width:min(560px,100%);max-height:90vh;overflow:auto;background:#101827;border:1px solid var(--border);border-radius:22px;padding:20px}
-.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modal-head h2{font-size:18px}
-.close{width:35px;height:35px;border:0;border-radius:9px;background:#172033;color:white}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
-.field label{font-size:10px;color:var(--muted);font-weight:700}
-.field input,.field select,.field textarea{width:100%;min-height:44px;border:1px solid var(--border);border-radius:10px;background:#0b1320;color:white;padding:9px 11px;outline:none}
-.field textarea{min-height:80px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#8b5cf6}
-.save-btn{width:100%;height:46px;margin-top:14px;border:0;border-radius:11px;color:white;font-weight:900;background:linear-gradient(135deg,#7c3aed,#4f46e5)}
-.routine{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px;background:var(--panel2);border:1px solid var(--border);border-radius:13px;margin-bottom:8px}
-.routine-info strong{display:block;font-size:12px}.routine-info span{display:block;color:var(--muted);font-size:9px;margin-top:4px}
-@media(max-width:800px){.week-grid{grid-template-columns:repeat(4,1fr)}.stats-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:560px){
- .app{padding:12px 10px 90px}.brand h1{font-size:17px}.nav{grid-template-columns:repeat(5,1fr);overflow-x:auto}
- .nav button{font-size:9px;min-width:65px}.day-title h2{font-size:20px}
- .timeline-item{grid-template-columns:52px 12px 1fr;gap:6px}.time{font-size:8px}.timeline-card{padding:10px}
- .activity-actions{flex-direction:column}.subject-list{grid-template-columns:1fr}.week-grid{grid-template-columns:repeat(2,1fr)}
- .form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.timer{font-size:48px}
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
 <div class="app">
 
 <header class="topbar">
- <div class="brand">
-  <div class="brand-icon">📚</div>
-  <div><h1>StudyTune</h1><p>برنامه‌ریز هوشمند مطالعه کنکور</p></div>
- </div>
- <button class="icon-btn" id="todayBtn">⌂</button>
+  <div class="brand">
+    <div class="brand-icon">📚</div>
+    <div>
+      <h1>StudyTune</h1>
+      <p>برنامه‌ریز هوشمند مطالعه کنکور</p>
+    </div>
+  </div>
+
+  <div class="top-actions">
+    <button class="icon-btn" id="themeBtn">🎨</button>
+    <button class="icon-btn" id="settingsBtn">⚙️</button>
+  </div>
 </header>
 
-<nav class="nav">
- <button class="active" data-page="today">امروز</button>
- <button data-page="week">هفته</button>
- <button data-page="timer">تایمر</button>
- <button data-page="stats">آمار</button>
- <button data-page="subjects">درس‌ها</button>
+<nav class="nav" id="nav">
+  <button class="active" data-page="dashboard">داشبورد</button>
+  <button data-page="today">امروز</button>
+  <button data-page="week">برنامه</button>
+  <button data-page="tests">تست‌ها</button>
+  <button data-page="review">مرورها</button>
+  <button data-page="mistakes">اشتباهات</button>
+  <button data-page="timer">تایمر</button>
+  <button data-page="stats">آمار</button>
+  <button data-page="subjects">درس‌ها</button>
 </nav>
 
-<section class="page active" id="page-today">
- <div class="day-header">
-  <div class="day-title"><h2 id="dayTitle">امروز</h2><p id="dayDate"></p></div>
-  <div class="date-actions"><button id="prevDay">‹</button><button id="nextDay">›</button></div>
- </div>
- <div class="daily-progress">
-  <div class="progress-head"><strong>پیشرفت برنامه امروز</strong><span id="dailyPercent">۰٪</span></div>
-  <div class="progress"><div id="dailyProgress"></div></div>
- </div>
- <div class="timeline" id="timeline"></div>
+<main>
+
+<!-- DASHBOARD -->
+<section class="page active" id="page-dashboard">
+
+  <div class="hero card">
+    <div>
+      <span class="eyebrow">داشبورد امروز</span>
+      <h2 id="dashboardGreeting">سلام 👋</h2>
+      <p id="dashboardDate"></p>
+    </div>
+
+    <div class="countdown">
+      <span>⏳ تا کنکور</span>
+      <strong id="examCountdown">—</strong>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat">
+      <span>⏱️</span>
+      <strong id="dashMinutes">۰</strong>
+      <small>دقیقه مطالعه</small>
+    </div>
+
+    <div class="stat">
+      <span>📝</span>
+      <strong id="dashTests">۰</strong>
+      <small>تست</small>
+    </div>
+
+    <div class="stat">
+      <span>🎯</span>
+      <strong id="dashAccuracy">۰٪</strong>
+      <small>میانگین درصد</small>
+    </div>
+
+    <div class="stat">
+      <span>🔥</span>
+      <strong id="dashStreak">۰</strong>
+      <small>روز متوالی</small>
+    </div>
+  </div>
+
+  <div class="grid-2">
+
+    <div class="card">
+      <div class="card-title">
+        <h2>🎯 هدف امروز</h2>
+        <span id="dashGoalText">۰ / ۰</span>
+      </div>
+
+      <div class="big-progress">
+        <div id="dashGoalBar"></div>
+      </div>
+
+      <div class="goal-meta">
+        <span>پیشرفت</span>
+        <strong id="dashGoalPercent">۰٪</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <h2>⭐ سطح شما</h2>
+        <span id="levelText">Level 1</span>
+      </div>
+
+      <div class="level-box">
+        <div class="level-number" id="levelNumber">1</div>
+        <div class="level-info">
+          <strong id="xpText">۰ XP</strong>
+          <div class="big-progress">
+            <div id="xpBar"></div>
+          </div>
+          <small id="xpNext">۱۰۰ XP تا سطح بعد</small>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="grid-2">
+
+    <div class="card">
+      <div class="card-title">
+        <h2>✨ پیشنهاد مطالعه</h2>
+        <button class="small-btn" id="newSuggestion">↻</button>
+      </div>
+
+      <div id="suggestionBox"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <h2>🏆 دستاوردها</h2>
+        <span id="achievementCount">۰</span>
+      </div>
+
+      <div class="achievement-preview" id="achievementPreview"></div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2>📈 مطالعه ۷ روز اخیر</h2>
+    </div>
+    <div class="chart" id="dashboardChart"></div>
+  </div>
+
 </section>
 
+
+<!-- TODAY -->
+<section class="page" id="page-today">
+
+  <div class="section-head">
+    <div>
+      <h2 id="dayTitle">امروز</h2>
+      <p id="dayDate"></p>
+    </div>
+
+    <div class="date-actions">
+      <button id="prevDay">‹</button>
+      <button id="todayBtn">امروز</button>
+      <button id="nextDay">›</button>
+    </div>
+  </div>
+
+  <div class="daily-progress card">
+    <div class="card-title">
+      <h2>📅 پیشرفت برنامه</h2>
+      <strong id="dailyPercent">۰٪</strong>
+    </div>
+
+    <div class="big-progress">
+      <div id="dailyProgress"></div>
+    </div>
+  </div>
+
+  <div class="timeline" id="timeline"></div>
+
+</section>
+
+
+<!-- WEEK -->
 <section class="page" id="page-week">
- <div class="card">
-  <div class="card-title"><h2>📅 برنامه هفتگی</h2><span id="weekRange"></span></div>
-  <div class="week-grid" id="weekGrid"></div>
- </div>
- <div class="card">
-  <div class="card-title"><h2>🔄 روتین‌ها</h2><button class="small-btn" id="addRoutineBtn">＋</button></div>
-  <div id="routineList"></div>
- </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2>📅 برنامه هفتگی</h2>
+      <div>
+        <button class="small-btn" id="prevWeek">‹</button>
+        <button class="small-btn" id="nextWeek">›</button>
+      </div>
+    </div>
+
+    <div class="week-grid" id="weekGrid"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2>🗓️ تقویم ماهانه</h2>
+      <div>
+        <button class="small-btn" id="prevMonth">‹</button>
+        <button class="small-btn" id="nextMonth">›</button>
+      </div>
+    </div>
+
+    <div class="month-calendar" id="monthCalendar"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2>🔄 روتین‌ها</h2>
+      <button class="small-btn" id="addRoutineBtn">＋</button>
+    </div>
+    <div id="routineList"></div>
+  </div>
+
 </section>
 
+
+<!-- TESTS -->
+<section class="page" id="page-tests">
+
+  <div class="card">
+    <div class="card-title">
+      <h2>📝 ثبت عملکرد تست</h2>
+      <button class="primary-btn" id="addTestBtn">＋ ثبت تست</button>
+    </div>
+
+    <div class="stats-grid mini">
+      <div class="stat">
+        <span>📝</span>
+        <strong id="testTotal">۰</strong>
+        <small>کل تست</small>
+      </div>
+
+      <div class="stat">
+        <span>✅</span>
+        <strong id="testCorrect">۰</strong>
+        <small>درست</small>
+      </div>
+
+      <div class="stat">
+        <span>❌</span>
+        <strong id="testWrong">۰</strong>
+        <small>غلط</small>
+      </div>
+
+      <div class="stat">
+        <span>🎯</span>
+        <strong id="testAccuracy">۰٪</strong>
+        <small>درصد</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2>📊 عملکرد درس‌ها</h2>
+    </div>
+    <div id="subjectTestStats"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2>📝 آخرین تست‌ها</h2>
+    </div>
+    <div id="testHistory"></div>
+  </div>
+
+</section>
+
+
+<!-- REVIEW -->
+<section class="page" id="page-review">
+
+  <div class="card">
+    <div class="card-title">
+      <h2>🧠 مرور هوشمند</h2>
+      <span>بر اساس فاصله‌های مرور</span>
+    </div>
+
+    <div class="review-info">
+      <div>مرور بر اساس فاصله‌های ۱، ۳، ۷، ۱۴ و ۳۰ روزه ایجاد می‌شود.</div>
+    </div>
+  </div>
+
+  <div id="reviewList"></div>
+
+</section>
+
+
+<!-- MISTAKES -->
+<section class="page" id="page-mistakes">
+
+  <div class="card">
+    <div class="card-title">
+      <h2>📕 دفترچه اشتباهات</h2>
+      <button class="primary-btn" id="addMistakeBtn">＋ اشتباه جدید</button>
+    </div>
+
+    <div id="mistakeList"></div>
+  </div>
+
+</section>
+
+
+<!-- TIMER -->
 <section class="page" id="page-timer">
- <div class="card timer-box">
-  <div class="timer-subject" id="timerSubject">هنوز جلسه‌ای انتخاب نشده</div>
-  <div class="timer" id="timer">00:00:00</div>
-  <div class="timer-status" id="timerStatus">آماده شروع مطالعه</div>
-  <div class="timer-actions">
-   <button class="timer-start" id="timerStart">▶ شروع</button>
-   <button class="timer-stop" id="timerStop">■ پایان</button>
+
+  <div class="card timer-card">
+
+    <div class="timer-mode-tabs">
+      <button class="active" data-timer-mode="stopwatch">کرنومتر</button>
+      <button data-timer-mode="pomodoro">پومودورو</button>
+    </div>
+
+    <div id="timerSubject">جلسه مطالعه</div>
+
+    <div class="timer" id="timer">00:00:00</div>
+
+    <div class="timer-status" id="timerStatus">
+      آماده شروع مطالعه
+    </div>
+
+    <div class="timer-actions">
+      <button class="primary-btn big" id="timerStart">▶ شروع</button>
+      <button class="secondary-btn big" id="timerPause">Ⅱ توقف</button>
+      <button class="danger-btn big" id="timerStop">■ پایان</button>
+    </div>
+
+    <div class="pomodoro-options" id="pomodoroOptions">
+      <button data-pomo="25">25 / 5</button>
+      <button data-pomo="50">50 / 10</button>
+      <button data-pomo="90">90 / 15</button>
+    </div>
+
   </div>
- </div>
- <div class="card">
-  <div class="card-title"><h2>🎯 هدف امروز</h2></div>
-  <div class="goal">
-   <div class="goal-head"><strong>ساعت مطالعه</strong><span id="timerGoalText">۰ / ۶۰ دقیقه</span></div>
-   <div class="goal-bar"><div class="goal-fill" id="timerGoal"></div></div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2>🎯 هدف مطالعه امروز</h2>
+      <span id="timerGoalText">۰ / ۳۶۰ دقیقه</span>
+    </div>
+
+    <div class="big-progress">
+      <div id="timerGoalBar"></div>
+    </div>
   </div>
- </div>
+
 </section>
 
+
+<!-- STATS -->
 <section class="page" id="page-stats">
- <div class="stats-grid">
-  <div class="stat"><div class="stat-icon">⏱️</div><strong class="stat-value" id="statMinutes">۰</strong><span class="stat-label">دقیقه مطالعه</span></div>
-  <div class="stat"><div class="stat-icon">📚</div><strong class="stat-value" id="statSessions">۰</strong><span class="stat-label">جلسه</span></div>
-  <div class="stat"><div class="stat-icon">✅</div><strong class="stat-value" id="statCompleted">۰٪</strong><span class="stat-label">پایبندی</span></div>
-  <div class="stat"><div class="stat-icon">🔥</div><strong class="stat-value" id="statDays">۰</strong><span class="stat-label">روز فعال</span></div>
- </div>
 
- <div class="card" style="margin-top:14px">
-  <div class="card-title"><h2>📈 ساعات مطالعه</h2><span>۷ روز اخیر</span></div>
-  <div class="chart" id="chart"></div>
- </div>
+  <div class="stats-grid">
 
- <div class="card">
-  <div class="card-title"><h2>🎯 اهداف</h2></div>
-  <div class="goal"><div class="goal-head"><strong>هدف روزانه</strong><span id="dailyGoalText"></span></div><div class="goal-bar"><div class="goal-fill" id="dailyGoal"></div></div></div>
-  <div class="goal"><div class="goal-head"><strong>هدف هفتگی</strong><span id="weeklyGoalText"></span></div><div class="goal-bar"><div class="goal-fill" id="weeklyGoal"></div></div></div>
- </div>
+    <div class="stat">
+      <span>⏱️</span>
+      <strong id="statMinutes">۰</strong>
+      <small>دقیقه</small>
+    </div>
+
+    <div class="stat">
+      <span>📚</span>
+      <strong id="statSessions">۰</strong>
+      <small>جلسه</small>
+    </div>
+
+    <div class="stat">
+      <span>📝</span>
+      <strong id="statTests">۰</strong>
+      <small>تست</small>
+    </div>
+
+    <div class="stat">
+      <span>🔥</span>
+      <strong id="statDays">۰</strong>
+      <small>روز فعال</small>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2>📈 ساعات مطالعه</h2>
+      <span>۱۴ روز اخیر</span>
+    </div>
+    <div class="chart tall" id="statsChart"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2>🎯 اهداف</h2>
+    </div>
+
+    <div class="goal-row">
+      <div>
+        <strong>هدف روزانه</strong>
+        <span id="dailyGoalText"></span>
+      </div>
+      <div class="big-progress">
+        <div id="dailyGoal"></div>
+      </div>
+    </div>
+
+    <div class="goal-row">
+      <div>
+        <strong>هدف هفتگی</strong>
+        <span id="weeklyGoalText"></span>
+      </div>
+      <div class="big-progress">
+        <div id="weeklyGoal"></div>
+      </div>
+    </div>
+  </div>
+
 </section>
 
+
+<!-- SUBJECTS -->
 <section class="page" id="page-subjects">
- <div class="card">
-  <div class="card-title"><h2>📚 درس‌های کنکور</h2><button class="small-btn" id="addSubjectBtn">＋</button></div>
-  <div class="subject-filter" id="subjectFilter"></div>
-  <div class="subject-list" id="subjectList"></div>
- </div>
- <div class="card">
-  <div class="card-title"><h2>📊 زمان مطالعه هر درس</h2></div>
-  <div id="subjectStats"></div>
- </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2>📚 درس‌ها</h2>
+      <button class="primary-btn" id="addSubjectBtn">＋ درس</button>
+    </div>
+
+    <div class="subject-filter" id="subjectFilter"></div>
+    <div class="subject-list" id="subjectList"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2>📊 عملکرد درس‌ها</h2>
+    </div>
+    <div id="subjectStats"></div>
+  </div>
+
 </section>
+
+</main>
 
 <button class="fab" id="fab">＋</button>
+
 </div>
 
+
+<!-- ACTIVITY MODAL -->
 <div class="modal" id="activityModal">
 <div class="modal-box">
- <div class="modal-head"><h2 id="activityModalTitle">افزودن فعالیت</h2><button class="close" data-close="activityModal">×</button></div>
- <form id="activityForm">
-  <input type="hidden" id="editId">
-  <div class="form-grid">
-   <div class="field"><label>تاریخ</label><input type="date" id="fDate" required></div>
-   <div class="field"><label>گروه آزمایشی</label><select id="fGroup"></select></div>
-   <div class="field"><label>درس</label><select id="fSubject" required></select></div>
-   <div class="field"><label>مبحث</label><input id="fTopic" placeholder="مثلاً تابع"></div>
-   <div class="field"><label>ساعت شروع</label><input type="time" id="fStart" required></div>
-   <div class="field"><label>مدت مطالعه</label><input type="number" id="fDuration" min="1" max="1440" value="60" required></div>
-   <div class="field"><label>تکرار</label><select id="fRepeat"><option value="none">بدون تکرار</option><option value="daily">هر روز</option><option value="weekly">هر هفته</option></select></div>
-   <div class="field full"><label>یادداشت</label><textarea id="fNote" placeholder="یادداشت جلسه..."></textarea></div>
+
+  <div class="modal-head">
+    <h2 id="activityModalTitle">افزودن فعالیت</h2>
+    <button class="close" data-close="activityModal">×</button>
   </div>
-  <button class="save-btn">ذخیره فعالیت</button>
- </form>
+
+  <form id="activityForm">
+
+    <input type="hidden" id="editId">
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label>تاریخ</label>
+        <input type="date" id="fDate" required>
+      </div>
+
+      <div class="field">
+        <label>درس</label>
+        <select id="fSubject" required></select>
+      </div>
+
+      <div class="field">
+        <label>مبحث</label>
+        <input id="fTopic" placeholder="مثلاً ژنتیک">
+      </div>
+
+      <div class="field">
+        <label>ساعت شروع</label>
+        <input type="time" id="fStart" required>
+      </div>
+
+      <div class="field">
+        <label>مدت</label>
+        <input type="number" id="fDuration" min="1" value="60" required>
+      </div>
+
+      <div class="field">
+        <label>تکرار</label>
+        <select id="fRepeat">
+          <option value="none">بدون تکرار</option>
+          <option value="daily">هر روز</option>
+          <option value="weekly">هر هفته</option>
+        </select>
+      </div>
+
+      <div class="field full">
+        <label>یادداشت</label>
+        <textarea id="fNote"></textarea>
+      </div>
+
+    </div>
+
+    <button class="save-btn">ذخیره</button>
+
+  </form>
 </div>
 </div>
 
+
+<!-- TEST MODAL -->
+<div class="modal" id="testModal">
+<div class="modal-box">
+
+  <div class="modal-head">
+    <h2>📝 ثبت تست</h2>
+    <button class="close" data-close="testModal">×</button>
+  </div>
+
+  <form id="testForm">
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label>درس</label>
+        <select id="testSubject" required></select>
+      </div>
+
+      <div class="field">
+        <label>مبحث</label>
+        <input id="testTopic">
+      </div>
+
+      <div class="field">
+        <label>تعداد کل</label>
+        <input type="number" id="testCount" min="1" value="20" required>
+      </div>
+
+      <div class="field">
+        <label>درست</label>
+        <input type="number" id="testCorrectInput" min="0" value="0" required>
+      </div>
+
+      <div class="field">
+        <label>غلط</label>
+        <input type="number" id="testWrongInput" min="0" value="0" required>
+      </div>
+
+      <div class="field">
+        <label>نزده</label>
+        <input type="number" id="testBlankInput" min="0" value="0">
+      </div>
+
+      <div class="field">
+        <label>زمان تست (دقیقه)</label>
+        <input type="number" id="testTime" min="0" value="30">
+      </div>
+
+    </div>
+
+    <button class="save-btn">ثبت عملکرد</button>
+
+  </form>
+</div>
+</div>
+
+
+<!-- MISTAKE MODAL -->
+<div class="modal" id="mistakeModal">
+<div class="modal-box">
+
+  <div class="modal-head">
+    <h2>📕 ثبت اشتباه</h2>
+    <button class="close" data-close="mistakeModal">×</button>
+  </div>
+
+  <form id="mistakeForm">
+
+    <div class="field">
+      <label>درس</label>
+      <select id="mistakeSubject" required></select>
+    </div>
+
+    <div class="field">
+      <label>مبحث</label>
+      <input id="mistakeTopic">
+    </div>
+
+    <div class="field">
+      <label>علت اشتباه</label>
+      <select id="mistakeReason">
+        <option>بی‌دقتی</option>
+        <option>عدم تسلط</option>
+        <option>فراموشی</option>
+        <option>اشتباه محاسباتی</option>
+        <option>برداشت اشتباه از سؤال</option>
+        <option>مدیریت زمان</option>
+        <option>سایر</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>نکته / پاسخ صحیح</label>
+      <textarea id="mistakeNote"></textarea>
+    </div>
+
+    <button class="save-btn">ذخیره اشتباه</button>
+
+  </form>
+</div>
+</div>
+
+
+<!-- SUBJECT MODAL -->
 <div class="modal" id="subjectModal">
 <div class="modal-box">
- <div class="modal-head"><h2>افزودن درس</h2><button class="close" data-close="subjectModal">×</button></div>
- <form id="subjectForm">
-  <div class="field"><label>گروه آزمایشی</label><select id="newSubjectGroup"></select></div>
-  <div class="field" style="margin-top:12px"><label>نام درس</label><input id="subjectName" required></div>
-  <div class="field" style="margin-top:12px"><label>نوع درس</label><select id="newSubjectType"><option>اختصاصی</option><option>عمومی / سوابق تحصیلی</option></select></div>
-  <div class="field" style="margin-top:12px"><label>رنگ</label><input type="color" id="subjectColor" value="#7c3aed"></div>
-  <button class="save-btn">افزودن درس</button>
- </form>
+
+  <div class="modal-head">
+    <h2>📚 افزودن درس</h2>
+    <button class="close" data-close="subjectModal">×</button>
+  </div>
+
+  <form id="subjectForm">
+
+    <div class="field">
+      <label>گروه</label>
+      <select id="newSubjectGroup">
+        <option>تجربی</option>
+        <option>ریاضی</option>
+        <option>انسانی</option>
+        <option>هنر</option>
+        <option>زبان</option>
+        <option>عمومی</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>نام درس</label>
+      <input id="subjectName" required>
+    </div>
+
+    <div class="field">
+      <label>رنگ</label>
+      <input type="color" id="subjectColor" value="#7c3aed">
+    </div>
+
+    <button class="save-btn">افزودن درس</button>
+
+  </form>
 </div>
 </div>
 
+
+<!-- ROUTINE MODAL -->
 <div class="modal" id="routineModal">
 <div class="modal-box">
- <div class="modal-head"><h2>ساخت روتین</h2><button class="close" data-close="routineModal">×</button></div>
- <form id="routineForm">
-  <div class="field"><label>نام روتین</label><input id="routineName" placeholder="مثلاً روتین صبح" required></div>
-  <div class="field" style="margin-top:12px"><label>روزهای اجرا</label>
-   <select id="routineDays" multiple style="height:130px">
-    <option value="1">شنبه</option><option value="2">یکشنبه</option><option value="3">دوشنبه</option>
-    <option value="4">سه‌شنبه</option><option value="5">چهارشنبه</option><option value="6">پنجشنبه</option><option value="0">جمعه</option>
-   </select>
+
+  <div class="modal-head">
+    <h2>🔄 ساخت روتین</h2>
+    <button class="close" data-close="routineModal">×</button>
   </div>
-  <button class="save-btn">ساخت روتین</button>
- </form>
+
+  <form id="routineForm">
+
+    <div class="field">
+      <label>نام</label>
+      <input id="routineName" placeholder="مثلاً مطالعه صبح" required>
+    </div>
+
+    <div class="field">
+      <label>روزها</label>
+      <select id="routineDays" multiple>
+        <option value="1">شنبه</option>
+        <option value="2">یکشنبه</option>
+        <option value="3">دوشنبه</option>
+        <option value="4">سه‌شنبه</option>
+        <option value="5">چهارشنبه</option>
+        <option value="6">پنجشنبه</option>
+        <option value="0">جمعه</option>
+      </select>
+    </div>
+
+    <button class="save-btn">ساخت روتین</button>
+
+  </form>
 </div>
 </div>
 
-<script>
-"use strict";
 
-/* =========================================
-   لیست کامل دروس بر اساس گروه آزمایشی
-========================================= */
+<!-- SETTINGS MODAL -->
+<div class="modal" id="settingsModal">
+<div class="modal-box">
 
-const SUBJECTS=[
- /* تجربی */
- {id:"exp_bio",name:"زیست‌شناسی",group:"تجربی",type:"اختصاصی",color:"#ec4899"},
- {id:"exp_chem",name:"شیمی",group:"تجربی",type:"اختصاصی",color:"#22c55e"},
- {id:"exp_phys",name:"فیزیک",group:"تجربی",type:"اختصاصی",color:"#06b6d4"},
- {id:"exp_math",name:"ریاضی",group:"تجربی",type:"اختصاصی",color:"#8b5cf6"},
- {id:"exp_geo",name:"زمین‌شناسی",group:"تجربی",type:"اختصاصی",color:"#f59e0b"},
-
- /* ریاضی */
- {id:"math_math",name:"ریاضی",group:"ریاضی",type:"اختصاصی",color:"#8b5cf6"},
- {id:"math_phys",name:"فیزیک",group:"ریاضی",type:"اختصاصی",color:"#06b6d4"},
- {id:"math_chem",name:"شیمی",group:"ریاضی",type:"اختصاصی",color:"#22c55e"},
-
- /* انسانی */
- {id:"hum_math",name:"ریاضی و آمار",group:"انسانی",type:"اختصاصی",color:"#8b5cf6"},
- {id:"hum_econ",name:"اقتصاد",group:"انسانی",type:"اختصاصی",color:"#22c55e"},
- {id:"hum_lit",name:"علوم و فنون ادبی",group:"انسانی",type:"اختصاصی",color:"#ec4899"},
- {id:"hum_arabic",name:"عربی تخصصی",group:"انسانی",type:"اختصاصی",color:"#06b6d4"},
- {id:"hum_history",name:"تاریخ",group:"انسانی",type:"اختصاصی",color:"#f59e0b"},
- {id:"hum_geo",name:"جغرافیا",group:"انسانی",type:"اختصاصی",color:"#14b8a6"},
- {id:"hum_soc",name:"جامعه‌شناسی",group:"انسانی",type:"اختصاصی",color:"#ef4444"},
- {id:"hum_psych",name:"روان‌شناسی",group:"انسانی",type:"اختصاصی",color:"#a855f7"},
- {id:"hum_philosophy",name:"فلسفه و منطق",group:"انسانی",type:"اختصاصی",color:"#f97316"},
-
- /* هنر */
- {id:"art_creative",name:"درک عمومی هنر",group:"هنر",type:"اختصاصی",color:"#ec4899"},
- {id:"art_visual",name:"درک عمومی ریاضی و فیزیک",group:"هنر",type:"اختصاصی",color:"#06b6d4"},
- {id:"art_creative2",name:"خلاقیت تصویری و تجسمی",group:"هنر",type:"اختصاصی",color:"#8b5cf6"},
-
- /* زبان */
- {id:"lang_english",name:"زبان انگلیسی",group:"زبان",type:"اختصاصی",color:"#06b6d4"},
-
- /* عمومی / سوابق تحصیلی */
- {id:"gen_persian",name:"فارسی",group:"عمومی",type:"عمومی / سوابق تحصیلی",color:"#f97316"},
- {id:"gen_arabic",name:"عربی",group:"عمومی",type:"عمومی / سوابق تحصیلی",color:"#22c55e"},
- {id:"gen_religion",name:"دینی و قرآن",group:"عمومی",type:"عمومی / سوابق تحصیلی",color:"#a855f7"},
- {id:"gen_english",name:"زبان انگلیسی",group:"عمومی",type:"عمومی / سوابق تحصیلی",color:"#06b6d4"},
- {id:"gen_health",name:"سلامت و بهداشت",group:"عمومی",type:"عمومی / سوابق تحصیلی",color:"#ef4444"},
- {id:"gen_social",name:"علوم اجتماعی",group:"عمومی",type:"عمومی / سوابق تحصیلی",color:"#f59e0b"}
-];
-
-const GROUPS=["همه","تجربی","ریاضی","انسانی","هنر","زبان","عمومی"];
-
-const STORAGE_KEY="studyTuneDataV2";
-
-const defaultData={
- subjects:SUBJECTS.map(x=>({...x})),
- tasks:[],
- routines:[],
- settings:{dailyGoal:360,weeklyGoal:2520}
-};
-
-let data;
-
-try{
- data=JSON.parse(localStorage.getItem(STORAGE_KEY));
-}catch{
- data=null;
-}
-
-if(!data){
- data=defaultData;
- save();
-}
-
-data.subjects ||= SUBJECTS.map(x=>({...x}));
-data.tasks ||= [];
-data.routines ||= [];
-data.settings ||= {dailyGoal:360,weeklyGoal:2520};
-
-/* اگر کاربر نسخه قدیمی StudyTune را داشته باشد */
-const oldSubjects=["math","physics","chemistry","biology"];
-
-if(data.subjects.length<=4 &&
- data.subjects.every(s=>oldSubjects.includes(s.id))){
- data.subjects=SUBJECTS.map(x=>({...x}));
- save();
-}
-
-function save(){
- localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
-}
-
-/* =========================================
-   تاریخ
-========================================= */
-
-let selectedDate=new Date();
-
-function pad(n){return String(n).padStart(2,"0")}
-
-function dateKey(date){
- return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`;
-}
-
-function parseKey(key){
- const [y,m,d]=key.split("-").map(Number);
- return new Date(y,m-1,d);
-}
-
-function todayKey(){return dateKey(new Date())}
-
-function faDate(date){
- return new Intl.DateTimeFormat("fa-IR",{
-  weekday:"long",day:"numeric",month:"long"
- }).format(date);
-}
-
-const $=id=>document.getElementById(id);
-const pages=document.querySelectorAll(".page");
-const navButtons=document.querySelectorAll(".nav button");
-
-function escapeHTML(value){
- return String(value)
- .replaceAll("&","&amp;")
- .replaceAll("<","&lt;")
- .replaceAll(">","&gt;")
- .replaceAll('"',"&quot;")
- .replaceAll("'","&#039;");
-}
-
-/* =========================================
-   گروه و درس
-========================================= */
-
-let selectedGroup="همه";
-
-function subjectById(id){
- return data.subjects.find(s=>s.id===id) || SUBJECTS.find(s=>s.id===id);
-}
-
-function subjectName(id){
- return subjectById(id)?.name || "درس حذف‌شده";
-}
-
-function subjectColor(id){
- return subjectById(id)?.color || "#7c3aed";
-}
-
-function renderGroupOptions(){
-
- $("fGroup").innerHTML=GROUPS
-  .filter(x=>x!=="همه")
-  .map(g=>`<option value="${g}">${g}</option>`).join("");
-
- $("newSubjectGroup").innerHTML=GROUPS
-  .filter(x=>x!=="همه")
-  .map(g=>`<option value="${g}">${g}</option>`).join("");
-}
-
-function renderSubjectOptions(){
-
- const group=$("fGroup").value;
-
- const list=data.subjects.filter(s=>!group || s.group===group);
-
- $("fSubject").innerHTML=list.map(s=>
-  `<option value="${s.id}">${escapeHTML(s.name)} — ${escapeHTML(s.group)}</option>`
- ).join("");
-
- if(!list.length){
-  $("fSubject").innerHTML="<option value=''>درسی موجود نیست</option>";
- }
-}
-
-$("fGroup").addEventListener("change",renderSubjectOptions);
-
-/* =========================================
-   Navigation
-========================================= */
-
-navButtons.forEach(btn=>{
- btn.addEventListener("click",()=>{
-  const page=btn.dataset.page;
-
-  navButtons.forEach(x=>x.classList.remove("active"));
-  btn.classList.add("active");
-
-  pages.forEach(x=>x.classList.remove("active"));
-  $("page-"+page).classList.add("active");
-
-  if(page==="today")renderToday();
-  if(page==="week")renderWeek();
-  if(page==="stats")renderStats();
-  if(page==="subjects")renderSubjects();
- });
-});
-
-function openPage(page){
- const btn=document.querySelector(`[data-page="${page}"]`);
- if(btn)btn.click();
-}
-
-$("todayBtn").onclick=()=>{
- selectedDate=new Date();
- openPage("today");
-};
-
-/* =========================================
-   Activity
-========================================= */
-
-function taskEnd(task){
- const [h,m]=task.start.split(":").map(Number);
- const total=h*60+m+Number(task.duration);
- return `${pad(Math.floor(total/60)%24)}:${pad(total%60)}`;
-}
-
-function tasksForDate(key){
- return data.tasks.filter(t=>t.date===key)
-  .sort((a,b)=>a.start.localeCompare(b.start));
-}
-
-function totalMinutes(tasks){
- return tasks.reduce((sum,t)=>sum+Number(t.duration||0),0);
-}
-
-function renderToday(){
-
- const key=dateKey(selectedDate);
- const tasks=tasksForDate(key);
-
- $("dayTitle").textContent=key===todayKey()?"امروز":faDate(selectedDate);
-
- $("dayDate").textContent=new Intl.DateTimeFormat("fa-IR",{
-  year:"numeric",month:"long",day:"numeric"
- }).format(selectedDate);
-
- const completed=tasks.filter(t=>t.done).length;
- const percent=tasks.length?Math.round(completed/tasks.length*100):0;
-
- $("dailyPercent").textContent=percent+"٪";
- $("dailyProgress").style.width=percent+"%";
-
- if(!tasks.length){
-  $("timeline").innerHTML=`
-   <div class="empty">
-    <div class="empty-icon">📅</div>
-    <strong>برای این روز برنامه‌ای نداری</strong>
-    <p style="margin-top:7px;font-size:10px">با دکمه + اولین جلسه مطالعه را اضافه کن.</p>
-   </div>`;
-  return;
- }
-
- $("timeline").innerHTML=tasks.map(task=>{
-
-  const color=subjectColor(task.subject);
-  const subject=subjectById(task.subject);
-
-  return `
-  <div class="timeline-item ${task.done?"done":""}">
-   <div class="time">${escapeHTML(task.start)}</div>
-   <div class="line"><div class="dot" style="background:${color}"></div></div>
-
-   <div class="timeline-card" style="border-right-color:${color}">
-    <div class="activity-main">
-     <div class="activity-title">${escapeHTML(subjectName(task.subject))}</div>
-
-     ${subject?`<div class="activity-topic">${escapeHTML(subject.group)} — ${escapeHTML(subject.type)}</div>`:""}
-
-     ${task.topic?`<div class="activity-topic">${escapeHTML(task.topic)}</div>`:""}
-
-     <div class="activity-meta">
-      <span class="badge">⏱ ${task.duration} دقیقه</span>
-      <span class="badge">تا ${taskEnd(task)}</span>
-      ${task.note?`<span class="badge">📝 یادداشت</span>`:""}
-     </div>
-    </div>
-
-    <div class="activity-actions">
-     <button class="small-btn start" onclick="startTaskTimer('${task.id}')">▶</button>
-     <button class="small-btn" onclick="toggleTask('${task.id}')">${task.done?"↩":"✓"}</button>
-     <button class="small-btn" onclick="editTask('${task.id}')">✎</button>
-     <button class="small-btn delete" onclick="deleteTask('${task.id}')">🗑</button>
-    </div>
-   </div>
-  </div>`;
- }).join("");
-}
-
-window.toggleTask=id=>{
- const task=data.tasks.find(t=>t.id===id);
- if(!task)return;
- task.done=!task.done;
- save();
- renderToday();
- renderStats();
-};
-
-window.deleteTask=id=>{
- if(!confirm("این فعالیت حذف شود؟"))return;
- data.tasks=data.tasks.filter(t=>t.id!==id);
- save();
- renderAll();
-};
-
-window.editTask=id=>{
-
- const task=data.tasks.find(t=>t.id===id);
- if(!task)return;
-
- const subject=subjectById(task.subject);
-
- $("editId").value=task.id;
- $("fDate").value=task.date;
- $("fGroup").value=subject?.group||"تجربی";
-
- renderSubjectOptions();
-
- $("fSubject").value=task.subject;
- $("fTopic").value=task.topic||"";
- $("fStart").value=task.start;
- $("fDuration").value=task.duration;
- $("fRepeat").value=task.repeat||"none";
- $("fNote").value=task.note||"";
-
- $("activityModalTitle").textContent="ویرایش فعالیت";
- showModal("activityModal");
-};
-
-/* =========================================
-   Activity Form
-========================================= */
-
-$("activityForm").onsubmit=e=>{
-
- e.preventDefault();
-
- const id=$("editId").value;
-
- const task={
-  id:id||crypto.randomUUID(),
-  date:$("fDate").value,
-  subject:$("fSubject").value,
-  topic:$("fTopic").value.trim(),
-  start:$("fStart").value,
-  duration:Math.max(1,Math.min(1440,Number($("fDuration").value))),
-  repeat:$("fRepeat").value,
-  note:$("fNote").value.trim(),
-  done:id?(data.tasks.find(t=>t.id===id)?.done||false):false
- };
-
- if(!task.date||!task.start||!task.subject)return;
-
- if(id){
-
-  const index=data.tasks.findIndex(t=>t.id===id);
-  if(index>=0)data.tasks[index]=task;
-
- }else{
-
-  data.tasks.push(task);
-
-  if(task.repeat==="daily"){
-
-   for(let i=1;i<=30;i++){
-    const d=parseKey(task.date);
-    d.setDate(d.getDate()+i);
-
-    data.tasks.push({
-     ...task,id:crypto.randomUUID(),date:dateKey(d),
-     repeat:"generated",done:false
-    });
-   }
-  }
-
-  if(task.repeat==="weekly"){
-
-   for(let i=1;i<=12;i++){
-    const d=parseKey(task.date);
-    d.setDate(d.getDate()+i*7);
-
-    data.tasks.push({
-     ...task,id:crypto.randomUUID(),date:dateKey(d),
-     repeat:"generated",done:false
-    });
-   }
-  }
- }
-
- save();
- hideModal("activityModal");
- resetActivityForm();
- renderAll();
-};
-
-function resetActivityForm(){
-
- $("activityForm").reset();
- $("editId").value="";
- $("fDate").value=dateKey(selectedDate);
- $("fDuration").value=60;
- $("fGroup").value="تجربی";
- renderSubjectOptions();
- $("activityModalTitle").textContent="افزودن فعالیت";
-}
-
-$("fab").onclick=()=>{
- resetActivityForm();
- showModal("activityModal");
-};
-
-$("prevDay").onclick=()=>{
- selectedDate.setDate(selectedDate.getDate()-1);
- renderToday();
-};
-
-$("nextDay").onclick=()=>{
- selectedDate.setDate(selectedDate.getDate()+1);
- renderToday();
-};
-
-/* =========================================
-   Week
-========================================= */
-
-function mondayOfWeek(date){
- const d=new Date(date);
- const day=d.getDay();
- const diff=day===0?-6:1-day;
- d.setDate(d.getDate()+diff);
- return d;
-}
-
-function renderWeek(){
-
- const monday=mondayOfWeek(selectedDate);
-
- const names=["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"];
-
- const grid=$("weekGrid");
- grid.innerHTML="";
-
- for(let i=0;i<7;i++){
-
-  const d=new Date(monday);
-  d.setDate(monday.getDate()+i);
-
-  const key=dateKey(d);
-  const tasks=tasksForDate(key);
-
-  const div=document.createElement("div");
-  div.className="week-day"+(key===dateKey(selectedDate)?" active":"");
-
-  div.innerHTML=`
-   <div class="week-day-name">${names[i]}</div>
-   <div class="week-day-number">${d.getDate()}</div>
-
-   ${tasks.slice(0,3).map(t=>`
-    <div class="week-task" style="border-right:2px solid ${subjectColor(t.subject)}">
-     ${escapeHTML(subjectName(t.subject))}
-    </div>`).join("")}
-
-   ${tasks.length>3?`<div style="color:#64748b;font-size:8px">+${tasks.length-3} بیشتر</div>`:""}
-  `;
-
-  div.onclick=()=>{
-   selectedDate=new Date(d);
-   openPage("today");
-  };
-
-  grid.appendChild(div);
- }
-
- $("weekRange").textContent=
- `${faDate(monday)} تا ${faDate(new Date(monday.getFullYear(),monday.getMonth(),monday.getDate()+6))}`;
-
- renderRoutines();
-}
-
-/* =========================================
-   Routines
-========================================= */
-
-function renderRoutines(){
-
- const list=$("routineList");
-
- if(!data.routines.length){
-  list.innerHTML=`<div class="empty">هنوز روتینی ساخته نشده.</div>`;
-  return;
- }
-
- const dayNames=["جمعه","شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه"];
-
- list.innerHTML=data.routines.map(r=>`
-  <div class="routine">
-   <div class="routine-info">
-    <strong>🔄 ${escapeHTML(r.name)}</strong>
-    <span>${r.days.map(d=>dayNames[d]).join("، ")}</span>
-   </div>
-   <button class="small-btn delete" onclick="deleteRoutine('${r.id}')">🗑</button>
+  <div class="modal-head">
+    <h2>⚙️ تنظیمات</h2>
+    <button class="close" data-close="settingsModal">×</button>
   </div>
- `).join("");
-}
 
-window.deleteRoutine=id=>{
- if(!confirm("این روتین حذف شود؟"))return;
- data.routines=data.routines.filter(r=>r.id!==id);
- save();
- renderRoutines();
-};
+  <form id="settingsForm">
 
-$("addRoutineBtn").onclick=()=>{
- $("routineForm").reset();
- showModal("routineModal");
-};
-
-$("routineForm").onsubmit=e=>{
-
- e.preventDefault();
-
- const days=[...$("routineDays").selectedOptions].map(x=>Number(x.value));
-
- if(!days.length){
-  alert("حداقل یک روز را انتخاب کن.");
-  return;
- }
-
- data.routines.push({
-  id:crypto.randomUUID(),
-  name:$("routineName").value.trim(),
-  days
- });
-
- save();
- hideModal("routineModal");
- renderRoutines();
-};
-
-/* =========================================
-   Timer
-========================================= */
-
-let timerSeconds=0;
-let timerInterval=null;
-let timerTaskId=null;
-
-function updateTimer(){
-
- const h=Math.floor(timerSeconds/3600);
- const m=Math.floor((timerSeconds%3600)/60);
- const s=timerSeconds%60;
-
- $("timer").textContent=`${pad(h)}:${pad(m)}:${pad(s)}`;
-
- const todayMinutes=Math.floor(timerSeconds/60);
- const logged=totalMinutes(tasksForDate(todayKey()).filter(t=>t.done));
-
- const percent=Math.min(
-  100,
-  Math.round(((logged+todayMinutes)/data.settings.dailyGoal)*100)
- );
-
- $("timerGoal").style.width=percent+"%";
- $("timerGoalText").textContent=
- `${logged+todayMinutes} / ${data.settings.dailyGoal} دقیقه`;
-}
-
-$("timerStart").onclick=()=>{
-
- if(timerInterval)return;
-
- timerInterval=setInterval(()=>{
-  timerSeconds++;
-  updateTimer();
- },1000);
-
- $("timerStatus").textContent="در حال مطالعه...";
-};
-
-$("timerStop").onclick=()=>stopTimer(true);
-
-function stopTimer(saveSession){
-
- if(timerInterval){
-  clearInterval(timerInterval);
-  timerInterval=null;
- }
-
- if(saveSession&&timerSeconds>=60){
-
-  const minutes=Math.floor(timerSeconds/60);
-
-  const oldTask=timerTaskId?
-   data.tasks.find(t=>t.id===timerTaskId):null;
-
-  data.tasks.push({
-   id:crypto.randomUUID(),
-   date:todayKey(),
-   subject:oldTask?.subject||data.subjects[0]?.id,
-   topic:"جلسه تایمر",
-   start:new Date().toTimeString().slice(0,5),
-   duration:minutes,
-   repeat:"none",
-   note:"ثبت‌شده توسط تایمر",
-   done:true
-  });
-
-  save();
- }
-
- timerSeconds=0;
- timerTaskId=null;
-
- $("timerStatus").textContent="آماده شروع مطالعه";
- updateTimer();
- renderAll();
-}
-
-window.startTaskTimer=id=>{
-
- const task=data.tasks.find(t=>t.id===id);
- if(!task)return;
-
- timerTaskId=id;
- timerSeconds=0;
-
- $("timerSubject").textContent=
- `${subjectName(task.subject)} — ${task.topic||"مطالعه"}`;
-
- openPage("timer");
- updateTimer();
-};
-
-/* =========================================
-   Stats
-========================================= */
-
-function formatMinutes(min){
-
- min=Math.round(min);
-
- if(min<60)return `${min} دقیقه`;
-
- const h=Math.floor(min/60);
- const m=min%60;
-
- return m?`${h}س ${m}د`:`${h} ساعت`;
-}
-
-function renderStats(){
-
- const total=totalMinutes(data.tasks);
- const sessions=data.tasks.length;
- const completed=data.tasks.filter(t=>t.done).length;
-
- const adherence=sessions?
-  Math.round(completed/sessions*100):0;
-
- const days=new Set(
-  data.tasks.filter(t=>Number(t.duration)>0).map(t=>t.date)
- ).size;
-
- $("statMinutes").textContent=formatMinutes(total);
- $("statSessions").textContent=sessions;
- $("statCompleted").textContent=adherence+"٪";
- $("statDays").textContent=days;
-
- renderChart();
- renderGoals();
-}
-
-function renderChart(){
-
- const chart=$("chart");
- chart.innerHTML="";
-
- const values=[];
-
- for(let i=6;i>=0;i--){
-
-  const d=new Date();
-  d.setDate(d.getDate()-i);
-
-  values.push({
-   date:d,
-   minutes:totalMinutes(tasksForDate(dateKey(d)))
-  });
- }
-
- const max=Math.max(
-  data.settings.dailyGoal,
-  ...values.map(x=>x.minutes),
-  1
- );
-
- values.forEach(x=>{
-
-  const item=document.createElement("div");
-  item.className="bar-item";
-
-  const bar=document.createElement("div");
-  bar.className="bar";
-
-  const fill=document.createElement("div");
-  fill.style.height=`${Math.min(100,x.minutes/max*100)}%`;
-
-  bar.appendChild(fill);
-
-  const label=document.createElement("div");
-  label.className="bar-label";
-  label.textContent=new Intl.DateTimeFormat("fa-IR",{weekday:"short"}).format(x.date);
-
-  item.append(bar,label);
-  chart.appendChild(item);
- });
-}
-
-function renderGoals(){
-
- const today=totalMinutes(tasksForDate(todayKey()));
- const monday=mondayOfWeek(new Date());
-
- let week=0;
-
- for(let i=0;i<7;i++){
-  const d=new Date(monday);
-  d.setDate(monday.getDate()+i);
-  week+=totalMinutes(tasksForDate(dateKey(d)));
- }
-
- const dp=Math.min(100,today/data.settings.dailyGoal*100);
- const wp=Math.min(100,week/data.settings.weeklyGoal*100);
-
- $("dailyGoal").style.width=dp+"%";
- $("weeklyGoal").style.width=wp+"%";
-
- $("dailyGoalText").textContent=
- `${today} / ${data.settings.dailyGoal} دقیقه`;
-
- $("weeklyGoalText").textContent=
- `${week} / ${data.settings.weeklyGoal} دقیقه`;
-}
-
-/* =========================================
-   Subjects
-========================================= */
-
-function renderSubjectFilter(){
-
- const box=$("subjectFilter");
-
- box.innerHTML=GROUPS.map(group=>`
-  <button class="filter-btn ${selectedGroup===group?"active":""}"
-   onclick="selectSubjectGroup('${group}')">
-   ${group}
-  </button>
- `).join("");
-}
-
-window.selectSubjectGroup=group=>{
- selectedGroup=group;
- renderSubjects();
-};
-
-function renderSubjects(){
-
- renderSubjectFilter();
-
- const list=$("subjectList");
-
- const subjects=data.subjects.filter(
-  s=>selectedGroup==="همه"||s.group===selectedGroup
- );
-
- if(!subjects.length){
-  list.innerHTML=`<div class="empty" style="grid-column:1/-1">درسی وجود ندارد.</div>`;
- }else{
-
-  list.innerHTML=subjects.map(s=>{
-
-   const minutes=totalMinutes(
-    data.tasks.filter(t=>t.subject===s.id)
-   );
-
-   return `
-    <div class="subject-card">
-
-     <div class="subject-color" style="background:${s.color}"></div>
-
-     <div class="subject-info">
-      <strong>${escapeHTML(s.name)}</strong>
-      <span>${formatMinutes(minutes)}</span>
-      <div class="subject-group">${escapeHTML(s.group)} • ${escapeHTML(s.type)}</div>
-     </div>
-
-     <div class="subject-actions">
-      <button class="small-btn delete" onclick="deleteSubject('${s.id}')">🗑</button>
-     </div>
-
+    <div class="field">
+      <label>نام شما</label>
+      <input id="userName" placeholder="مثلاً علی">
     </div>
-   `;
-  }).join("");
- }
 
- renderSubjectStats();
-}
-
-function renderSubjectStats(){
-
- const box=$("subjectStats");
-
- const subjects=data.subjects.filter(
-  s=>selectedGroup==="همه"||s.group===selectedGroup
- );
-
- if(!subjects.length){
-  box.innerHTML=`<div class="empty">درسی وجود ندارد.</div>`;
-  return;
- }
-
- const values=subjects.map(s=>({
-  ...s,
-  minutes:totalMinutes(data.tasks.filter(t=>t.subject===s.id))
- }));
-
- const max=Math.max(1,...values.map(x=>x.minutes));
-
- box.innerHTML=values.map(s=>`
-  <div class="goal">
-   <div class="goal-head">
-    <strong>${escapeHTML(s.name)}</strong>
-    <span>${formatMinutes(s.minutes)}</span>
-   </div>
-   <div class="goal-bar">
-    <div class="goal-fill"
-     style="width:${s.minutes/max*100}%;background:${s.color}">
+    <div class="field">
+      <label>هدف روزانه مطالعه - دقیقه</label>
+      <input type="number" id="dailyGoalInput" min="1">
     </div>
-   </div>
+
+    <div class="field">
+      <label>هدف هفتگی - دقیقه</label>
+      <input type="number" id="weeklyGoalInput" min="1">
+    </div>
+
+    <div class="field">
+      <label>تاریخ کنکور</label>
+      <input type="date" id="examDate">
+    </div>
+
+    <button class="save-btn">ذخیره تنظیمات</button>
+
+  </form>
+
+  <div class="settings-actions">
+    <button class="secondary-btn" id="exportBtn">⬇️ Export JSON</button>
+    <button class="secondary-btn" id="importBtn">⬆️ Import JSON</button>
+    <button class="secondary-btn" id="csvBtn">📊 خروجی CSV</button>
+    <button class="danger-btn" id="resetBtn">🗑 پاک کردن اطلاعات</button>
   </div>
- `).join("");
-}
 
-window.deleteSubject=id=>{
+  <input type="file" id="importFile" accept=".json" hidden>
 
- if(data.subjects.length<=1){
-  alert("حداقل یک درس باید وجود داشته باشد.");
-  return;
- }
+</div>
+</div>
 
- if(!confirm("این درس حذف شود؟"))return;
 
- data.subjects=data.subjects.filter(s=>s.id!==id);
+<!-- ACHIEVEMENTS -->
+<div class="modal" id="achievementModal">
+<div class="modal-box">
 
- save();
- renderAll();
-};
+  <div class="modal-head">
+    <h2>🏆 دستاوردها</h2>
+    <button class="close" data-close="achievementModal">×</button>
+  </div>
 
-/* =========================================
-   Add Subject
-========================================= */
+  <div id="achievementList"></div>
 
-$("addSubjectBtn").onclick=()=>{
+</div>
+</div>
 
- $("subjectForm").reset();
- $("subjectColor").value="#7c3aed";
- renderGroupOptions();
- showModal("subjectModal");
-};
 
-$("subjectForm").onsubmit=e=>{
+<!-- THEME -->
+<div class="modal" id="themeModal">
+<div class="modal-box">
 
- e.preventDefault();
+  <div class="modal-head">
+    <h2>🎨 انتخاب تم</h2>
+    <button class="close" data-close="themeModal">×</button>
+  </div>
 
- const name=$("subjectName").value.trim();
- const group=$("newSubjectGroup").value;
- const type=$("newSubjectType").value;
+  <div class="theme-grid">
+    <button data-theme="purple">🟣 بنفش</button>
+    <button data-theme="blue">🔵 آبی</button>
+    <button data-theme="green">🟢 سبز</button>
+    <button data-theme="amoled">⚫ AMOLED</button>
+    <button data-theme="light">☀️ روشن</button>
+  </div>
 
- if(!name)return;
+</div>
+</div>
 
- data.subjects.push({
-  id:crypto.randomUUID(),
-  name,
-  group,
-  type,
-  color:$("subjectColor").value
- });
 
- save();
+<script src="app.js"></script>
 
- hideModal("subjectModal");
- renderAll();
-};
-
-/* =========================================
-   Modals
-========================================= */
-
-function showModal(id){
- $(id).classList.add("show");
-}
-
-function hideModal(id){
- $(id).classList.remove("show");
-}
-
-document.querySelectorAll("[data-close]").forEach(btn=>{
- btn.onclick=()=>hideModal(btn.dataset.close);
-});
-
-document.querySelectorAll(".modal").forEach(modal=>{
- modal.onclick=e=>{
-  if(e.target===modal)modal.classList.remove("show");
- };
-});
-
-/* =========================================
-   Render All
-========================================= */
-
-function renderAll(){
-
- renderGroupOptions();
-
- renderSubjectOptions();
-
- renderToday();
-
- renderWeek();
-
- renderStats();
-
- renderSubjects();
-
- updateTimer();
-}
-
-/* =========================================
-   Initial
-========================================= */
-
-$("fDate").value=todayKey();
-
-renderAll();
-
-</script>
 </body>
-  </html>
+     </html>
