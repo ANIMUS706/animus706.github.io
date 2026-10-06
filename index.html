@@ -40,6 +40,7 @@
 
         body {
             font-family: "Vazirmatn", Tahoma, sans-serif;
+
             background:
                 radial-gradient(circle at 10% 10%, rgba(124, 58, 237, 0.20), transparent 30%),
                 radial-gradient(circle at 90% 20%, rgba(6, 182, 212, 0.15), transparent 28%),
@@ -51,8 +52,6 @@
             padding: 40px 18px;
             overflow-x: hidden;
         }
-
-        /* Background lights */
 
         body::before,
         body::after {
@@ -96,9 +95,11 @@
         header .logo {
             width: 72px;
             height: 72px;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             margin: 0 auto 20px;
 
             font-size: 35px;
@@ -139,7 +140,7 @@
             font-size: 14px;
         }
 
-        /* Glass Card */
+        /* Glass */
 
         .glass {
             background: var(--card);
@@ -168,6 +169,7 @@
         .section-icon {
             width: 42px;
             height: 42px;
+
             display: flex;
             align-items: center;
             justify-content: center;
@@ -198,7 +200,7 @@
 
         #studyForm {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(6, 1fr);
             gap: 14px;
             align-items: end;
         }
@@ -287,6 +289,8 @@
                 0 10px 30px rgba(124, 58, 237, 0.25);
 
             transition: 0.25s;
+
+            grid-column: span 2;
         }
 
         .add-btn:hover {
@@ -386,6 +390,72 @@
             font-size: 12px;
         }
 
+        /* Progress */
+
+        .progress-wrapper {
+            margin-top: -20px;
+            margin-bottom: 30px;
+
+            padding: 18px 22px;
+
+            border-radius: 18px;
+
+            background: rgba(17, 24, 39, 0.55);
+            border: 1px solid var(--border);
+
+            box-shadow: var(--shadow);
+        }
+
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 10px;
+        }
+
+        .progress-top span:first-child {
+            color: var(--text-light);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .progress-top span:last-child {
+            color: #a78bfa;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+
+            background: rgba(15, 23, 42, 0.9);
+
+            border-radius: 50px;
+
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+
+            border-radius: inherit;
+
+            background: linear-gradient(
+                90deg,
+                #7c3aed,
+                #8b5cf6,
+                #22d3ee
+            );
+
+            box-shadow:
+                0 0 18px rgba(124, 58, 237, 0.45);
+
+            transition: width 0.5s ease;
+        }
+
         /* Schedule */
 
         .schedule-section {
@@ -405,10 +475,15 @@
 
         .schedule-title .badge {
             color: #c4b5fd;
+
             background: rgba(124, 58, 237, 0.1);
+
             border: 1px solid rgba(124, 58, 237, 0.2);
+
             padding: 7px 12px;
+
             border-radius: 20px;
+
             font-size: 11px;
         }
 
@@ -528,14 +603,75 @@
             transform: translateX(-3px);
         }
 
-        .task-checkbox {
-            width: 19px;
-            height: 19px;
+        /* Custom checkbox */
 
-            accent-color: #8b5cf6;
+        .checkbox-wrapper {
+            position: relative;
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+        .task-checkbox {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .checkmark {
+            width: 22px;
+            height: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 7px;
+
+            border: 2px solid #475569;
+
+            background: rgba(15, 23, 42, 0.8);
 
             cursor: pointer;
-            flex-shrink: 0;
+
+            transition: 0.25s;
+        }
+
+        .checkmark::after {
+            content: "✓";
+
+            color: white;
+            font-size: 13px;
+            font-weight: 900;
+
+            opacity: 0;
+            transform: scale(0.5);
+
+            transition: 0.2s;
+        }
+
+        .task-checkbox:checked + .checkmark {
+            border-color: #8b5cf6;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #06b6d4
+                );
+
+            box-shadow:
+                0 0 15px rgba(124, 58, 237, 0.35);
+        }
+
+        .task-checkbox:checked + .checkmark::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .task-checkbox:focus-visible + .checkmark {
+            outline: 3px solid rgba(124, 58, 237, 0.3);
         }
 
         .task-info {
@@ -572,8 +708,9 @@
         }
 
         .task-time {
-            color: #64748b;
+            color: #67e8f9;
             font-size: 10px;
+            font-weight: 600;
         }
 
         .delete-task {
@@ -607,6 +744,10 @@
         .task.completed .task-subject {
             text-decoration: line-through;
             color: #94a3b8;
+        }
+
+        .task.completed .task-time {
+            color: #4ade80;
         }
 
         /* Empty */
@@ -692,15 +833,18 @@
 
         /* Tablet */
 
-        @media (max-width: 900px) {
+        @media (max-width: 1000px) {
 
             #studyForm {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
 
             .add-btn {
-                grid-column: span 2;
+                grid-column: span 3;
             }
+        }
+
+        @media (max-width: 900px) {
 
             .stats {
                 grid-template-columns: repeat(2, 1fr);
@@ -767,6 +911,10 @@
                 font-size: 23px;
             }
 
+            .progress-wrapper {
+                padding: 15px;
+            }
+
             .schedule-title h2 {
                 font-size: 17px;
             }
@@ -785,7 +933,8 @@
             }
 
             .task-details {
-                display: none;
+                display: flex;
+                align-items: flex-end;
             }
 
             .delete-task {
@@ -801,13 +950,16 @@
 <div class="container">
 
     <!-- Header -->
+
     <header>
 
         <div class="logo">
             📚
         </div>
 
-        <h1>برنامه مطالعه کنکور</h1>
+        <h1>
+            برنامه مطالعه کنکور
+        </h1>
 
         <p>
             برنامه هفتگی خودت رو بساز و پیشرفتت رو دنبال کن 🚀
@@ -817,6 +969,7 @@
 
 
     <!-- Add Section -->
+
     <section class="add-section glass">
 
         <div class="section-title">
@@ -826,14 +979,21 @@
             </div>
 
             <div>
-                <h2>اضافه کردن مطالعه</h2>
-                <span>مطالعه جدیدت رو به برنامه اضافه کن</span>
+                <h2>
+                    اضافه کردن مطالعه
+                </h2>
+
+                <span>
+                    مطالعه جدیدت رو به برنامه اضافه کن
+                </span>
             </div>
 
         </div>
 
 
         <form id="studyForm">
+
+            <!-- Day -->
 
             <div class="form-group">
 
@@ -842,17 +1002,41 @@
                 </label>
 
                 <select id="day" required>
-                    <option value="شنبه">شنبه</option>
-                    <option value="یکشنبه">یکشنبه</option>
-                    <option value="دوشنبه">دوشنبه</option>
-                    <option value="سه‌شنبه">سه‌شنبه</option>
-                    <option value="چهارشنبه">چهارشنبه</option>
-                    <option value="پنجشنبه">پنجشنبه</option>
-                    <option value="جمعه">جمعه</option>
+
+                    <option value="شنبه">
+                        شنبه
+                    </option>
+
+                    <option value="یکشنبه">
+                        یکشنبه
+                    </option>
+
+                    <option value="دوشنبه">
+                        دوشنبه
+                    </option>
+
+                    <option value="سه‌شنبه">
+                        سه‌شنبه
+                    </option>
+
+                    <option value="چهارشنبه">
+                        چهارشنبه
+                    </option>
+
+                    <option value="پنجشنبه">
+                        پنجشنبه
+                    </option>
+
+                    <option value="جمعه">
+                        جمعه
+                    </option>
+
                 </select>
 
             </div>
 
+
+            <!-- Subject -->
 
             <div class="form-group">
 
@@ -870,6 +1054,8 @@
             </div>
 
 
+            <!-- Topic -->
+
             <div class="form-group">
 
                 <label for="topic">
@@ -884,6 +1070,8 @@
 
             </div>
 
+
+            <!-- Hours -->
 
             <div class="form-group">
 
@@ -903,19 +1091,39 @@
             </div>
 
 
+            <!-- Start -->
+
             <div class="form-group">
 
-                <label for="time">
+                <label for="startTime">
                     ساعت شروع
                 </label>
 
                 <input
                     type="time"
-                    id="time"
+                    id="startTime"
                 >
 
             </div>
 
+
+            <!-- End -->
+
+            <div class="form-group">
+
+                <label for="endTime">
+                    ساعت پایان
+                </label>
+
+                <input
+                    type="time"
+                    id="endTime"
+                >
+
+            </div>
+
+
+            <!-- Add -->
 
             <button
                 type="submit"
@@ -930,11 +1138,14 @@
 
 
     <!-- Statistics -->
+
     <section class="stats">
 
         <div class="stat-card">
 
-            <span>📖</span>
+            <span>
+                📖
+            </span>
 
             <strong id="totalSubjects">
                 0
@@ -949,7 +1160,9 @@
 
         <div class="stat-card">
 
-            <span>✅</span>
+            <span>
+                ✅
+            </span>
 
             <strong id="completedSubjects">
                 0
@@ -964,7 +1177,9 @@
 
         <div class="stat-card">
 
-            <span>⏱️</span>
+            <span>
+                ⏱️
+            </span>
 
             <strong id="totalHours">
                 0
@@ -979,7 +1194,9 @@
 
         <div class="stat-card">
 
-            <span>📊</span>
+            <span>
+                📊
+            </span>
 
             <strong id="progressPercent">
                 0%
@@ -994,7 +1211,36 @@
     </section>
 
 
+    <!-- Progress Bar -->
+
+    <section class="progress-wrapper">
+
+        <div class="progress-top">
+
+            <span>
+                پیشرفت هفتگی
+            </span>
+
+            <span id="progressText">
+                0%
+            </span>
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                id="progressFill"
+            ></div>
+
+        </div>
+
+    </section>
+
+
     <!-- Schedule -->
+
     <section class="schedule-section">
 
         <div class="schedule-title">
@@ -1011,7 +1257,6 @@
 
 
         <div id="schedule">
-
 
             <!-- شنبه -->
 
@@ -1180,16 +1425,17 @@
 
             </div>
 
-
         </div>
 
     </section>
 
 
     <!-- Clear -->
+
     <button
         id="clearAll"
         class="clear-btn"
+        type="button"
     >
         🗑️ پاک کردن کل برنامه
     </button>
@@ -1198,6 +1444,10 @@
 
 
 <script>
+
+    /* =========================
+       Elements
+    ========================= */
 
     const studyForm =
         document.getElementById("studyForm");
@@ -1214,8 +1464,11 @@
     const hoursInput =
         document.getElementById("hours");
 
-    const timeInput =
-        document.getElementById("time");
+    const startTimeInput =
+        document.getElementById("startTime");
+
+    const endTimeInput =
+        document.getElementById("endTime");
 
 
     const totalSubjects =
@@ -1230,15 +1483,58 @@
     const progressPercent =
         document.getElementById("progressPercent");
 
+    const progressText =
+        document.getElementById("progressText");
+
+    const progressFill =
+        document.getElementById("progressFill");
 
     const clearAllButton =
         document.getElementById("clearAll");
 
 
+    /* =========================
+       Load Saved Data
+    ========================= */
+
     let studyTasks = [];
 
+    try {
 
-    /* Add Study */
+        const savedTasks =
+            localStorage.getItem("konkurStudyTasks");
+
+        if (savedTasks) {
+
+            studyTasks =
+                JSON.parse(savedTasks);
+
+        }
+
+    } catch (error) {
+
+        studyTasks = [];
+
+    }
+
+
+    /* =========================
+       Save Data
+    ========================= */
+
+    function saveTasks() {
+
+        localStorage.setItem(
+            "konkurStudyTasks",
+            JSON.stringify(studyTasks)
+        );
+
+    }
+
+
+    /* =========================
+       Add Study
+    ========================= */
 
     studyForm.addEventListener(
         "submit",
@@ -1259,9 +1555,14 @@
             const hours =
                 Number(hoursInput.value);
 
-            const time =
-                timeInput.value;
+            const startTime =
+                startTimeInput.value;
 
+            const endTime =
+                endTimeInput.value;
+
+
+            /* Validate Subject */
 
             if (!subject) {
 
@@ -1269,41 +1570,85 @@
                     "لطفاً نام درس را وارد کن."
                 );
 
+                subjectInput.focus();
+
                 return;
             }
 
 
-            if (!hours || hours <= 0) {
+            /* Validate Hours */
+
+            if (
+                !Number.isFinite(hours) ||
+                hours <= 0
+            ) {
 
                 alert(
                     "لطفاً تعداد ساعت مطالعه را به‌درستی وارد کن."
                 );
 
+                hoursInput.focus();
+
                 return;
             }
 
 
+            /* Validate Time */
+
+            if (
+                startTime &&
+                endTime &&
+                startTime >= endTime
+            ) {
+
+                alert(
+                    "ساعت پایان باید بعد از ساعت شروع باشد."
+                );
+
+                endTimeInput.focus();
+
+                return;
+            }
+
+
+            /* New Task */
+
             const newTask = {
 
-                id: Date.now(),
+                id:
+                    Date.now() +
+                    Math.random(),
 
-                day: day,
+                day:
+                    day,
 
-                subject: subject,
+                subject:
+                    subject,
 
-                topic: topic,
+                topic:
+                    topic,
 
-                hours: hours,
+                hours:
+                    hours,
 
-                time: time,
+                startTime:
+                    startTime,
 
-                completed: false
+                endTime:
+                    endTime,
+
+                completed:
+                    false
 
             };
 
 
-            studyTasks.push(newTask);
+            studyTasks.push(
+                newTask
+            );
 
+
+            saveTasks();
 
             renderSchedule();
 
@@ -1312,16 +1657,23 @@
 
             studyForm.reset();
 
+            dayInput.value =
+                day;
+
         }
     );
 
 
-    /* Render */
+    /* =========================
+       Render Schedule
+    ========================= */
 
     function renderSchedule() {
 
         const dayCards =
-            document.querySelectorAll(".day-card");
+            document.querySelectorAll(
+                ".day-card"
+            );
 
 
         dayCards.forEach(
@@ -1330,14 +1682,21 @@
                 const day =
                     dayCard.dataset.day;
 
+
                 const tasksContainer =
-                    dayCard.querySelector(".tasks");
+                    dayCard.querySelector(
+                        ".tasks"
+                    );
+
 
                 const dayHoursElement =
-                    dayCard.querySelector(".day-hours");
+                    dayCard.querySelector(
+                        ".day-hours"
+                    );
 
 
-                tasksContainer.innerHTML = "";
+                tasksContainer.innerHTML =
+                    "";
 
 
                 const tasks =
@@ -1350,11 +1709,14 @@
                     );
 
 
+                /* Day Hours */
+
                 const hours =
                     tasks.reduce(
                         function(total, task) {
 
-                            return total + task.hours;
+                            return total +
+                                Number(task.hours || 0);
 
                         },
                         0
@@ -1365,10 +1727,16 @@
                     `${hours} ساعت`;
 
 
-                if (tasks.length === 0) {
+                /* Empty */
+
+                if (
+                    tasks.length === 0
+                ) {
 
                     const emptyMessage =
-                        document.createElement("div");
+                        document.createElement(
+                            "div"
+                        );
 
                     emptyMessage.className =
                         "empty-message";
@@ -1384,18 +1752,24 @@
                 }
 
 
+                /* Tasks */
+
                 tasks.forEach(
                     function(task) {
 
                         const taskElement =
-                            document.createElement("div");
+                            document.createElement(
+                                "div"
+                            );
 
 
                         taskElement.className =
                             "task";
 
 
-                        if (task.completed) {
+                        if (
+                            task.completed
+                        ) {
 
                             taskElement.classList.add(
                                 "completed"
@@ -1404,11 +1778,23 @@
                         }
 
 
+                        /* Checkbox Wrapper */
+
+                        const checkboxWrapper =
+                            document.createElement(
+                                "div"
+                            );
+
+                        checkboxWrapper.className =
+                            "checkbox-wrapper";
+
+
                         /* Checkbox */
 
                         const checkbox =
-                            document.createElement("input");
-
+                            document.createElement(
+                                "input"
+                            );
 
                         checkbox.type =
                             "checkbox";
@@ -1417,8 +1803,41 @@
                             "task-checkbox";
 
                         checkbox.checked =
-                            task.completed;
+                            Boolean(
+                                task.completed
+                            );
 
+                        checkbox.id =
+                            `task-${task.id}`;
+
+
+                        /* Checkmark */
+
+                        const checkmark =
+                            document.createElement(
+                                "label"
+                            );
+
+                        checkmark.className =
+                            "checkmark";
+
+                        checkmark.htmlFor =
+                            checkbox.id;
+
+                        checkmark.title =
+                            "علامت‌گذاری به عنوان انجام شده";
+
+
+                        checkboxWrapper.appendChild(
+                            checkbox
+                        );
+
+                        checkboxWrapper.appendChild(
+                            checkmark
+                        );
+
+
+                        /* Checkbox Event */
 
                         checkbox.addEventListener(
                             "change",
@@ -1426,6 +1845,9 @@
 
                                 task.completed =
                                     checkbox.checked;
+
+
+                                saveTasks();
 
                                 renderSchedule();
 
@@ -1438,16 +1860,20 @@
                         /* Info */
 
                         const taskInfo =
-                            document.createElement("div");
-
+                            document.createElement(
+                                "div"
+                            );
 
                         taskInfo.className =
                             "task-info";
 
 
-                        const subject =
-                            document.createElement("div");
+                        /* Subject */
 
+                        const subject =
+                            document.createElement(
+                                "div"
+                            );
 
                         subject.className =
                             "task-subject";
@@ -1461,11 +1887,16 @@
                         );
 
 
-                        if (task.topic) {
+                        /* Topic */
+
+                        if (
+                            task.topic
+                        ) {
 
                             const topic =
-                                document.createElement("div");
-
+                                document.createElement(
+                                    "div"
+                                );
 
                             topic.className =
                                 "task-topic";
@@ -1484,16 +1915,20 @@
                         /* Details */
 
                         const details =
-                            document.createElement("div");
-
+                            document.createElement(
+                                "div"
+                            );
 
                         details.className =
                             "task-details";
 
 
-                        const taskHours =
-                            document.createElement("span");
+                        /* Hours */
 
+                        const taskHours =
+                            document.createElement(
+                                "span"
+                            );
 
                         taskHours.className =
                             "task-hours";
@@ -1507,17 +1942,43 @@
                         );
 
 
-                        if (task.time) {
+                        /* Time */
+
+                        if (
+                            task.startTime ||
+                            task.endTime
+                        ) {
 
                             const taskTime =
-                                document.createElement("span");
-
+                                document.createElement(
+                                    "span"
+                                );
 
                             taskTime.className =
                                 "task-time";
 
-                            taskTime.textContent =
-                                task.time;
+
+                            if (
+                                task.startTime &&
+                                task.endTime
+                            ) {
+
+                                taskTime.textContent =
+                                    `${task.startTime} تا ${task.endTime}`;
+
+                            } else if (
+                                task.startTime
+                            ) {
+
+                                taskTime.textContent =
+                                    `شروع: ${task.startTime}`;
+
+                            } else {
+
+                                taskTime.textContent =
+                                    `پایان: ${task.endTime}`;
+
+                            }
 
 
                             details.appendChild(
@@ -1530,7 +1991,9 @@
                         /* Delete */
 
                         const deleteButton =
-                            document.createElement("button");
+                            document.createElement(
+                                "button"
+                            );
 
 
                         deleteButton.type =
@@ -1550,15 +2013,33 @@
                             "click",
                             function() {
 
+                                const confirmed =
+                                    confirm(
+                                        `آیا می‌خواهی مطالعه «${task.subject}» را حذف کنی؟`
+                                    );
+
+
+                                if (
+                                    !confirmed
+                                ) {
+                                    return;
+                                }
+
+
                                 studyTasks =
                                     studyTasks.filter(
                                         function(item) {
 
-                                            return item.id !== task.id;
+                                            return (
+                                                item.id !==
+                                                task.id
+                                            );
 
                                         }
                                     );
 
+
+                                saveTasks();
 
                                 renderSchedule();
 
@@ -1568,8 +2049,10 @@
                         );
 
 
+                        /* Build */
+
                         taskElement.appendChild(
-                            checkbox
+                            checkboxWrapper
                         );
 
                         taskElement.appendChild(
@@ -1598,7 +2081,9 @@
     }
 
 
-    /* Stats */
+    /* =========================
+       Statistics
+    ========================= */
 
     function updateStats() {
 
@@ -1620,25 +2105,34 @@
             studyTasks.reduce(
                 function(total, task) {
 
-                    return total + task.hours;
+                    return total +
+                        Number(task.hours || 0);
 
                 },
                 0
             );
 
 
-        let percentage = 0;
+        let percentage =
+            0;
 
 
-        if (total > 0) {
+        if (
+            total > 0
+        ) {
 
             percentage =
                 Math.round(
-                    (completed / total) * 100
+                    (
+                        completed /
+                        total
+                    ) * 100
                 );
 
         }
 
+
+        /* Stats */
 
         totalSubjects.textContent =
             total;
@@ -1647,21 +2141,37 @@
             completed;
 
         totalHours.textContent =
-            hours;
+            Number.isInteger(hours)
+                ? hours
+                : hours.toFixed(1);
 
         progressPercent.textContent =
+            `${percentage}%`;
+
+
+        /* Progress */
+
+        progressText.textContent =
+            `${percentage}%`;
+
+
+        progressFill.style.width =
             `${percentage}%`;
 
     }
 
 
-    /* Clear */
+    /* =========================
+       Clear All
+    ========================= */
 
     clearAllButton.addEventListener(
         "click",
         function() {
 
-            if (studyTasks.length === 0) {
+            if (
+                studyTasks.length === 0
+            ) {
 
                 alert(
                     "برنامه‌ای برای پاک کردن وجود ندارد."
@@ -1677,13 +2187,20 @@
                 );
 
 
-            if (!confirmed) {
+            if (
+                !confirmed
+            ) {
+
                 return;
+
             }
 
 
-            studyTasks = [];
+            studyTasks =
+                [];
 
+
+            saveTasks();
 
             renderSchedule();
 
@@ -1693,7 +2210,9 @@
     );
 
 
-    /* Initial */
+    /* =========================
+       Initial
+    ========================= */
 
     renderSchedule();
 
@@ -1702,4 +2221,4 @@
 </script>
 
 </body>
-</html>
+            </html>
