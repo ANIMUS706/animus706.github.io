@@ -5,218 +5,753 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>برنامه مطالعه کنکور</title>
 
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            color: #1e293b;
+            min-height: 100vh;
+            padding: 30px 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 32px;
+            color: #4f46e5;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .add-section {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .add-section h2,
+        .schedule-section h2 {
+            margin-bottom: 20px;
+            color: #334155;
+        }
+
+        #studyForm {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #475569;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            height: 45px;
+            padding: 0 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            outline: none;
+            background: #f8fafc;
+            font-family: inherit;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #6366f1;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+        }
+
+        .add-btn {
+            height: 45px;
+            border: none;
+            border-radius: 10px;
+            background: #4f46e5;
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #4338ca;
+            transform: translateY(-1px);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+        }
+
+        .stat-card span {
+            display: block;
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card strong {
+            display: block;
+            color: #4f46e5;
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .schedule-section {
+            margin-bottom: 25px;
+        }
+
+        #schedule {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .day-card {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+            border: 2px solid transparent;
+            transition: 0.2s;
+        }
+
+        .day-card:hover {
+            border-color: #c7d2fe;
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+        }
+
+        .day-header h3 {
+            color: #4f46e5;
+            font-size: 19px;
+        }
+
+        .day-hours {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .tasks {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .task {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            transition: 0.2s;
+        }
+
+        .task:hover {
+            background: #eef2ff;
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: #4f46e5;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .task-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .task-subject {
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .task-topic {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .task-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 3px;
+            white-space: nowrap;
+        }
+
+        .task-hours {
+            font-size: 12px;
+            color: #4f46e5;
+            font-weight: bold;
+        }
+
+        .task-time {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .delete-task {
+            border: none;
+            background: #fee2e2;
+            color: #dc2626;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .delete-task:hover {
+            background: #fecaca;
+        }
+
+        .task.completed {
+            opacity: 0.65;
+            background: #f0fdf4;
+        }
+
+        .task.completed .task-subject {
+            text-decoration: line-through;
+            color: #64748b;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #94a3b8;
+            padding: 20px 5px;
+            font-size: 13px;
+        }
+
+        .clear-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 12px 22px;
+            border: none;
+            border-radius: 10px;
+            background: #ef4444;
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .clear-btn:hover {
+            background: #dc2626;
+        }
+
+        @media (max-width: 850px) {
+            #studyForm {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .add-btn {
+                grid-column: span 2;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            #schedule {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 550px) {
+            body {
+                padding: 20px 10px;
+            }
+
+            header h1 {
+                font-size: 25px;
+            }
+
+            .add-section {
+                padding: 18px;
+            }
+
+            #studyForm {
+                grid-template-columns: 1fr;
+            }
+
+            .add-btn {
+                grid-column: span 1;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 15px 10px;
+            }
+
+            .stat-card strong {
+                font-size: 21px;
+            }
+
+            .task {
+                padding: 10px;
+                gap: 8px;
+            }
+
+            .task-details {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <header>
-            <h1>📚 برنامه مطالعه کنکور</h1>
-            <p>برنامه هفتگی از شنبه تا جمعه</p>
-        </header>
+    <header>
+        <h1>📚 برنامه مطالعه کنکور</h1>
+        <p>برنامه هفتگی از شنبه تا جمعه</p>
+    </header>
 
-        <!-- فرم اضافه کردن برنامه -->
-        <section class="add-section">
+    <section class="add-section">
 
-            <h2>➕ اضافه کردن مطالعه</h2>
+        <h2>➕ اضافه کردن مطالعه</h2>
 
-            <form id="studyForm">
+        <form id="studyForm">
 
-                <div class="form-group">
-                    <label for="day">روز</label>
-
-                    <select id="day" required>
-                        <option value="شنبه">شنبه</option>
-                        <option value="یکشنبه">یکشنبه</option>
-                        <option value="دوشنبه">دوشنبه</option>
-                        <option value="سه‌شنبه">سه‌شنبه</option>
-                        <option value="چهارشنبه">چهارشنبه</option>
-                        <option value="پنجشنبه">پنجشنبه</option>
-                        <option value="جمعه">جمعه</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="subject">درس</label>
-
-                    <input
-                        type="text"
-                        id="subject"
-                        placeholder="مثلاً ریاضی"
-                        required
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="topic">مبحث</label>
-
-                    <input
-                        type="text"
-                        id="topic"
-                        placeholder="مثلاً تابع"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="hours">ساعت مطالعه</label>
-
-                    <input
-                        type="number"
-                        id="hours"
-                        min="0.5"
-                        step="0.5"
-                        placeholder="مثلاً 2"
-                        required
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="time">ساعت شروع</label>
-
-                    <input
-                        type="time"
-                        id="time"
-                    >
-                </div>
-
-                <button type="submit" class="add-btn">
-                    افزودن به برنامه
-                </button>
-
-            </form>
-
-        </section>
-
-
-        <!-- آمار -->
-        <section class="stats">
-
-            <div class="stat-card">
-                <span>📖</span>
-                <strong id="totalSubjects">0</strong>
-                <p>کل مطالعه‌ها</p>
+            <div class="form-group">
+                <label for="day">روز</label>
+                <select id="day" required>
+                    <option value="شنبه">شنبه</option>
+                    <option value="یکشنبه">یکشنبه</option>
+                    <option value="دوشنبه">دوشنبه</option>
+                    <option value="سه‌شنبه">سه‌شنبه</option>
+                    <option value="چهارشنبه">چهارشنبه</option>
+                    <option value="پنجشنبه">پنجشنبه</option>
+                    <option value="جمعه">جمعه</option>
+                </select>
             </div>
 
-            <div class="stat-card">
-                <span>✅</span>
-                <strong id="completedSubjects">0</strong>
-                <p>انجام شده</p>
+            <div class="form-group">
+                <label for="subject">درس</label>
+                <input type="text" id="subject" placeholder="مثلاً ریاضی" required>
             </div>
 
-            <div class="stat-card">
-                <span>⏱️</span>
-                <strong id="totalHours">0</strong>
-                <p>ساعت مطالعه</p>
+            <div class="form-group">
+                <label for="topic">مبحث</label>
+                <input type="text" id="topic" placeholder="مثلاً تابع">
             </div>
 
-            <div class="stat-card">
-                <span>📊</span>
-                <strong id="progressPercent">0%</strong>
-                <p>پیشرفت</p>
+            <div class="form-group">
+                <label for="hours">ساعت مطالعه</label>
+                <input type="number" id="hours" min="0.5" step="0.5" placeholder="مثلاً 2" required>
             </div>
 
-        </section>
-
-
-        <!-- برنامه هفتگی -->
-        <section class="schedule-section">
-
-            <h2>🗓️ برنامه هفتگی</h2>
-
-            <div id="schedule">
-
-                <!-- شنبه -->
-                <div class="day-card" data-day="شنبه">
-                    <div class="day-header">
-                        <h3>شنبه</h3>
-                        <span class="day-hours">0 ساعت</span>
-                    </div>
-
-                    <div class="tasks"></div>
-                </div>
-
-
-                <!-- یکشنبه -->
-                <div class="day-card" data-day="یکشنبه">
-                    <div class="day-header">
-                        <h3>یکشنبه</h3>
-                        <span class="day-hours">0 ساعت</span>
-                    </div>
-
-                    <div class="tasks"></div>
-                </div>
-
-
-                <!-- دوشنبه -->
-                <div class="day-card" data-day="دوشنبه">
-                    <div class="day-header">
-                        <h3>دوشنبه</h3>
-                        <span class="day-hours">0 ساعت</span>
-                    </div>
-
-                    <div class="tasks"></div>
-                </div>
-
-
-                <!-- سه شنبه -->
-                <div class="day-card" data-day="سه‌شنبه">
-                    <div class="day-header">
-                        <h3>سه‌شنبه</h3>
-                        <span class="day-hours">0 ساعت</span>
-                    </div>
-
-                    <div class="tasks"></div>
-                </div>
-
-
-                <!-- چهارشنبه -->
-                <div class="day-card" data-day="چهارشنبه">
-                    <div class="day-header">
-                        <h3>چهارشنبه</h3>
-                        <span class="day-hours">0 ساعت</span>
-                    </div>
-
-                    <div class="tasks"></div>
-                </div>
-
-
-                <!-- پنجشنبه -->
-                <div class="day-card" data-day="پنجشنبه">
-                    <div class="day-header">
-                        <h3>پنجشنبه</h3>
-                        <span class="day-hours">0 ساعت</span>
-                    </div>
-
-                    <div class="tasks"></div>
-                </div>
-
-
-                <!-- جمعه -->
-                <div class="day-card" data-day="جمعه">
-                    <div class="day-header">
-                        <h3>جمعه</h3>
-                        <span class="day-hours">0 ساعت</span>
-                    </div>
-
-                    <div class="tasks"></div>
-                </div>
-
+            <div class="form-group">
+                <label for="time">ساعت شروع</label>
+                <input type="time" id="time">
             </div>
 
-        </section>
+            <button type="submit" class="add-btn">
+                افزودن به برنامه
+            </button>
 
+        </form>
+    </section>
 
-        <!-- دکمه پاک کردن -->
-        <button id="clearAll" class="clear-btn">
-            🗑️ پاک کردن کل برنامه
-        </button>
+    <section class="stats">
 
-    </div>
+        <div class="stat-card">
+            <span>📖</span>
+            <strong id="totalSubjects">0</strong>
+            <p>کل مطالعه‌ها</p>
+        </div>
 
+        <div class="stat-card">
+            <span>✅</span>
+            <strong id="completedSubjects">0</strong>
+            <p>انجام شده</p>
+        </div>
 
-    <script src="script.js"></script>
+        <div class="stat-card">
+            <span>⏱️</span>
+            <strong id="totalHours">0</strong>
+            <p>ساعت مطالعه</p>
+        </div>
+
+        <div class="stat-card">
+            <span>📊</span>
+            <strong id="progressPercent">0%</strong>
+            <p>پیشرفت</p>
+        </div>
+
+    </section>
+
+    <section class="schedule-section">
+
+        <h2>🗓️ برنامه هفتگی</h2>
+
+        <div id="schedule">
+
+            <div class="day-card" data-day="شنبه">
+                <div class="day-header">
+                    <h3>شنبه</h3>
+                    <span class="day-hours">0 ساعت</span>
+                </div>
+                <div class="tasks"></div>
+            </div>
+
+            <div class="day-card" data-day="یکشنبه">
+                <div class="day-header">
+                    <h3>یکشنبه</h3>
+                    <span class="day-hours">0 ساعت</span>
+                </div>
+                <div class="tasks"></div>
+            </div>
+
+            <div class="day-card" data-day="دوشنبه">
+                <div class="day-header">
+                    <h3>دوشنبه</h3>
+                    <span class="day-hours">0 ساعت</span>
+                </div>
+                <div class="tasks"></div>
+            </div>
+
+            <div class="day-card" data-day="سه‌شنبه">
+                <div class="day-header">
+                    <h3>سه‌شنبه</h3>
+                    <span class="day-hours">0 ساعت</span>
+                </div>
+                <div class="tasks"></div>
+            </div>
+
+            <div class="day-card" data-day="چهارشنبه">
+                <div class="day-header">
+                    <h3>چهارشنبه</h3>
+                    <span class="day-hours">0 ساعت</span>
+                </div>
+                <div class="tasks"></div>
+            </div>
+
+            <div class="day-card" data-day="پنجشنبه">
+                <div class="day-header">
+                    <h3>پنجشنبه</h3>
+                    <span class="day-hours">0 ساعت</span>
+                </div>
+                <div class="tasks"></div>
+            </div>
+
+            <div class="day-card" data-day="جمعه">
+                <div class="day-header">
+                    <h3>جمعه</h3>
+                    <span class="day-hours">0 ساعت</span>
+                </div>
+                <div class="tasks"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <button id="clearAll" class="clear-btn">
+        🗑️ پاک کردن کل برنامه
+    </button>
+
+</div>
+
+<script>
+    const studyForm = document.getElementById("studyForm");
+    const dayInput = document.getElementById("day");
+    const subjectInput = document.getElementById("subject");
+    const topicInput = document.getElementById("topic");
+    const hoursInput = document.getElementById("hours");
+    const timeInput = document.getElementById("time");
+
+    const totalSubjects = document.getElementById("totalSubjects");
+    const completedSubjects = document.getElementById("completedSubjects");
+    const totalHours = document.getElementById("totalHours");
+    const progressPercent = document.getElementById("progressPercent");
+
+    const clearAllButton = document.getElementById("clearAll");
+
+    let studyTasks = [];
+
+    studyForm.addEventListener("submit", function (event) {
+
+        event.preventDefault();
+
+        const day = dayInput.value;
+        const subject = subjectInput.value.trim();
+        const topic = topicInput.value.trim();
+        const hours = Number(hoursInput.value);
+        const time = timeInput.value;
+
+        if (!subject) {
+            alert("لطفاً نام درس را وارد کن.");
+            return;
+        }
+
+        if (!hours || hours <= 0) {
+            alert("لطفاً تعداد ساعت مطالعه را به‌درستی وارد کن.");
+            return;
+        }
+
+        const newTask = {
+            id: Date.now(),
+            day: day,
+            subject: subject,
+            topic: topic,
+            hours: hours,
+            time: time,
+            completed: false
+        };
+
+        studyTasks.push(newTask);
+
+        renderSchedule();
+        updateStats();
+
+        studyForm.reset();
+    });
+
+    function renderSchedule() {
+
+        const dayCards = document.querySelectorAll(".day-card");
+
+        dayCards.forEach(function (dayCard) {
+
+            const day = dayCard.dataset.day;
+            const tasksContainer = dayCard.querySelector(".tasks");
+            const dayHoursElement = dayCard.querySelector(".day-hours");
+
+            tasksContainer.innerHTML = "";
+
+            const tasks = studyTasks.filter(function (task) {
+                return task.day === day;
+            });
+
+            const hours = tasks.reduce(function (total, task) {
+                return total + task.hours;
+            }, 0);
+
+            dayHoursElement.textContent = `${hours} ساعت`;
+
+            if (tasks.length === 0) {
+
+                const emptyMessage = document.createElement("div");
+
+                emptyMessage.className = "empty-message";
+                emptyMessage.textContent = "هنوز برنامه‌ای برای این روز ثبت نشده.";
+
+                tasksContainer.appendChild(emptyMessage);
+
+                return;
+            }
+
+            tasks.forEach(function (task) {
+
+                const taskElement = document.createElement("div");
+
+                taskElement.className = "task";
+
+                if (task.completed) {
+                    taskElement.classList.add("completed");
+                }
+
+                const checkbox = document.createElement("input");
+
+                checkbox.type = "checkbox";
+                checkbox.className = "task-checkbox";
+                checkbox.checked = task.completed;
+
+                checkbox.addEventListener("change", function () {
+
+                    task.completed = checkbox.checked;
+
+                    renderSchedule();
+                    updateStats();
+                });
+
+                const taskInfo = document.createElement("div");
+
+                taskInfo.className = "task-info";
+
+                const subject = document.createElement("div");
+
+                subject.className = "task-subject";
+                subject.textContent = task.subject;
+
+                taskInfo.appendChild(subject);
+
+                if (task.topic) {
+
+                    const topic = document.createElement("div");
+
+                    topic.className = "task-topic";
+                    topic.textContent = task.topic;
+
+                    taskInfo.appendChild(topic);
+                }
+
+                const details = document.createElement("div");
+
+                details.className = "task-details";
+
+                const taskHours = document.createElement("span");
+
+                taskHours.className = "task-hours";
+                taskHours.textContent = `${task.hours} ساعت`;
+
+                details.appendChild(taskHours);
+
+                if (task.time) {
+
+                    const taskTime = document.createElement("span");
+
+                    taskTime.className = "task-time";
+                    taskTime.textContent = task.time;
+
+                    details.appendChild(taskTime);
+                }
+
+                const deleteButton = document.createElement("button");
+
+                deleteButton.type = "button";
+                deleteButton.className = "delete-task";
+                deleteButton.textContent = "🗑️";
+                deleteButton.title = "حذف مطالعه";
+
+                deleteButton.addEventListener("click", function () {
+
+                    studyTasks = studyTasks.filter(function (item) {
+                        return item.id !== task.id;
+                    });
+
+                    renderSchedule();
+                    updateStats();
+                });
+
+                taskElement.appendChild(checkbox);
+                taskElement.appendChild(taskInfo);
+                taskElement.appendChild(details);
+                taskElement.appendChild(deleteButton);
+
+                tasksContainer.appendChild(taskElement);
+            });
+        });
+    }
+
+    function updateStats() {
+
+        const total = studyTasks.length;
+
+        const completed = studyTasks.filter(function (task) {
+            return task.completed;
+        }).length;
+
+        const hours = studyTasks.reduce(function (total, task) {
+            return total + task.hours;
+        }, 0);
+
+        let percentage = 0;
+
+        if (total > 0) {
+            percentage = Math.round((completed / total) * 100);
+        }
+
+        totalSubjects.textContent = total;
+        completedSubjects.textContent = completed;
+        totalHours.textContent = hours;
+        progressPercent.textContent = `${percentage}%`;
+    }
+
+    clearAllButton.addEventListener("click", function () {
+
+        if (studyTasks.length === 0) {
+            alert("برنامه‌ای برای پاک کردن وجود ندارد.");
+            return;
+        }
+
+        const confirmed = confirm(
+            "آیا مطمئنی می‌خواهی کل برنامه هفته را پاک کنی؟"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        studyTasks = [];
+
+        renderSchedule();
+        updateStats();
+    });
+
+    renderSchedule();
+    updateStats();
+</script>
 
 </body>
-  </html>
+                        </html>
