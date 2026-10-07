@@ -1,0 +1,546 @@
+<!DOCTYPE html>  <html lang="fa" dir="rtl">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width,initial-scale=1.0">  
+<meta name="theme-color" content="#7c3aed">  <title>StudyTune | برنامه‌ریز هوشمند کنکور</title>  <link rel="preconnect" href="https://fonts.googleapis.com">  
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">  <link rel="stylesheet" href="style.css">  
+</head>  <body>  <div class="app">  <header class="topbar">  
+  <div class="brand">  
+    <div class="brand-icon">📚</div>  
+    <div>  
+      <h1>StudyTune</h1>  
+      <p>برنامه‌ریز هوشمند مطالعه کنکور</p>  
+    </div>  
+  </div>    <div class="top-actions">  
+    <button class="icon-btn" id="themeBtn">🎨</button>  
+    <button class="icon-btn" id="settingsBtn">⚙️</button>  
+  </div>  
+</header>  <nav class="nav" id="nav">  
+  <button class="active" data-page="dashboard">داشبورد</button>  
+  <button data-page="today">امروز</button>  
+  <button data-page="week">برنامه</button>  
+  <button data-page="tests">تست‌ها</button>  
+  <button data-page="review">مرورها</button>  
+  <button data-page="mistakes">اشتباهات</button>  
+  <button data-page="timer">تایمر</button>  
+  <button data-page="stats">آمار</button>  
+  <button data-page="subjects">درس‌ها</button>  
+</nav>  <main>  <!-- DASHBOARD -->  <section class="page active" id="page-dashboard">    <div class="hero card">  
+    <div>  
+      <span class="eyebrow">داشبورد امروز</span>  
+      <h2 id="dashboardGreeting">سلام 👋</h2>  
+      <p id="dashboardDate"></p>  
+    </div>  <div class="countdown">  
+  <span>⏳ تا کنکور</span>  
+  <strong id="examCountdown">—</strong>  
+</div>
+
+  </div>    <div class="stats-grid">  
+    <div class="stat">  
+      <span>⏱️</span>  
+      <strong id="dashMinutes">۰</strong>  
+      <small>دقیقه مطالعه</small>  
+    </div>  <div class="stat">  
+  <span>📝</span>  
+  <strong id="dashTests">۰</strong>  
+  <small>تست</small>  
+</div>  
+
+<div class="stat">  
+  <span>🎯</span>  
+  <strong id="dashAccuracy">۰٪</strong>  
+  <small>میانگین درصد</small>  
+</div>  
+
+<div class="stat">  
+  <span>🔥</span>  
+  <strong id="dashStreak">۰</strong>  
+  <small>روز متوالی</small>  
+</div>
+
+  </div>    <div class="grid-2">  <div class="card">  
+  <div class="card-title">  
+    <h2>🎯 هدف امروز</h2>  
+    <span id="dashGoalText">۰ / ۰</span>  
+  </div>  
+
+  <div class="big-progress">  
+    <div id="dashGoalBar"></div>  
+  </div>  
+
+  <div class="goal-meta">  
+    <span>پیشرفت</span>  
+    <strong id="dashGoalPercent">۰٪</strong>  
+  </div>  
+</div>  
+
+<div class="card">  
+  <div class="card-title">  
+    <h2>⭐ سطح شما</h2>  
+    <span id="levelText">Level 1</span>  
+  </div>  
+
+  <div class="level-box">  
+    <div class="level-number" id="levelNumber">1</div>  
+    <div class="level-info">  
+      <strong id="xpText">۰ XP</strong>  
+      <div class="big-progress">  
+        <div id="xpBar"></div>  
+      </div>  
+      <small id="xpNext">۱۰۰ XP تا سطح بعد</small>  
+    </div>  
+  </div>  
+</div>
+
+  </div>    <div class="grid-2">  <div class="card">  
+  <div class="card-title">  
+    <h2>✨ پیشنهاد مطالعه</h2>  
+    <button class="small-btn" id="newSuggestion">↻</button>  
+  </div>  
+
+  <div id="suggestionBox"></div>  
+</div>  
+
+<div class="card">  
+  <div class="card-title">  
+    <h2>🏆 دستاوردها</h2>  
+    <span id="achievementCount">۰</span>  
+  </div>  
+
+  <div class="achievement-preview" id="achievementPreview"></div>  
+</div>
+
+  </div>    <div class="card">  
+    <div class="card-title">  
+      <h2>📈 مطالعه ۷ روز اخیر</h2>  
+    </div>  
+    <div class="chart" id="dashboardChart"></div>  
+  </div>  </section>  <!-- TODAY -->  <section class="page" id="page-today">    <div class="section-head">  
+    <div>  
+      <h2 id="dayTitle">امروز</h2>  
+      <p id="dayDate"></p>  
+    </div>  <div class="date-actions">  
+  <button id="prevDay">‹</button>  
+  <button id="todayBtn">امروز</button>  
+  <button id="nextDay">›</button>  
+</div>
+
+  </div>    <div class="daily-progress card">  
+    <div class="card-title">  
+      <h2>📅 پیشرفت برنامه</h2>  
+      <strong id="dailyPercent">۰٪</strong>  
+    </div>  <div class="big-progress">  
+  <div id="dailyProgress"></div>  
+</div>
+
+  </div>    <div class="timeline" id="timeline"></div>  </section>  <!-- WEEK -->  <section class="page" id="page-week">    <div class="card">  
+    <div class="card-title">  
+      <h2>📅 برنامه هفتگی</h2>  
+      <div>  
+        <button class="small-btn" id="prevWeek">‹</button>  
+        <button class="small-btn" id="nextWeek">›</button>  
+      </div>  
+    </div>  <div class="week-grid" id="weekGrid"></div>
+
+  </div>    <div class="card">  
+    <div class="card-title">  
+      <h2>🗓️ تقویم ماهانه</h2>  
+      <div>  
+        <button class="small-btn" id="prevMonth">‹</button>  
+        <button class="small-btn" id="nextMonth">›</button>  
+      </div>  
+    </div>  <div class="month-calendar" id="monthCalendar"></div>
+
+  </div>    <div class="card">  
+    <div class="card-title">  
+      <h2>🔄 روتین‌ها</h2>  
+      <button class="small-btn" id="addRoutineBtn">＋</button>  
+    </div>  
+    <div id="routineList"></div>  
+  </div>  </section>  <!-- TESTS -->  <section class="page" id="page-tests">    <div class="card">  
+    <div class="card-title">  
+      <h2>📝 ثبت عملکرد تست</h2>  
+      <button class="primary-btn" id="addTestBtn">＋ ثبت تست</button>  
+    </div>  <div class="stats-grid mini">  
+  <div class="stat">  
+    <span>📝</span>  
+    <strong id="testTotal">۰</strong>  
+    <small>کل تست</small>  
+  </div>  
+
+  <div class="stat">  
+    <span>✅</span>  
+    <strong id="testCorrect">۰</strong>  
+    <small>درست</small>  
+  </div>  
+
+  <div class="stat">  
+    <span>❌</span>  
+    <strong id="testWrong">۰</strong>  
+    <small>غلط</small>  
+  </div>  
+
+  <div class="stat">  
+    <span>🎯</span>  
+    <strong id="testAccuracy">۰٪</strong>  
+    <small>درصد</small>  
+  </div>  
+</div>
+
+  </div>    <div class="card">  
+    <div class="card-title">  
+      <h2>📊 عملکرد درس‌ها</h2>  
+    </div>  
+    <div id="subjectTestStats"></div>  
+  </div>    <div class="card">  
+    <div class="card-title">  
+      <h2>📝 آخرین تست‌ها</h2>  
+    </div>  
+    <div id="testHistory"></div>  
+  </div>  </section>  <!-- REVIEW -->  <section class="page" id="page-review">    <div class="card">  
+    <div class="card-title">  
+      <h2>🧠 مرور هوشمند</h2>  
+      <span>بر اساس فاصله‌های مرور</span>  
+    </div>  <div class="review-info">  
+  <div>مرور بر اساس فاصله‌های ۱، ۳، ۷، ۱۴ و ۳۰ روزه ایجاد می‌شود.</div>  
+</div>
+
+  </div>    <div id="reviewList"></div>  </section>  <!-- MISTAKES -->  <section class="page" id="page-mistakes">    <div class="card">  
+    <div class="card-title">  
+      <h2>📕 دفترچه اشتباهات</h2>  
+      <button class="primary-btn" id="addMistakeBtn">＋ اشتباه جدید</button>  
+    </div>  <div id="mistakeList"></div>
+
+  </div>  </section>  <!-- TIMER -->  <section class="page" id="page-timer">    <div class="card timer-card">  <div class="timer-mode-tabs">  
+  <button class="active" data-timer-mode="stopwatch">کرنومتر</button>  
+  <button data-timer-mode="pomodoro">پومودورو</button>  
+</div>  
+
+<div id="timerSubject">جلسه مطالعه</div>  
+
+<div class="timer" id="timer">00:00:00</div>  
+
+<div class="timer-status" id="timerStatus">  
+  آماده شروع مطالعه
+
+  </div>    <div class="card">  
+    <div class="card-title">  
+      <h2>🎯 هدف مطالعه امروز</h2>  
+      <span id="timerGoalText">۰ / ۳۶۰ دقیقه</span>  
+    </div>  <div class="big-progress">  
+  <div id="timerGoalBar"></div>  
+</div>
+
+  </div>  </section>  <!-- STATS -->  <section class="page" id="page-stats">    <div class="stats-grid">  <div class="stat">  
+  <span>⏱️</span>  
+  <strong id="statMinutes">۰</strong>  
+  <small>دقیقه</small>  
+</div>  
+
+<div class="stat">  
+  <span>📚</span>  
+  <strong id="statSessions">۰</strong>  
+  <small>جلسه</small>  
+</div>  
+
+<div class="stat">  
+  <span>📝</span>  
+  <strong id="statTests">۰</strong>  
+  <small>تست</small>  
+</div>  
+
+<div class="stat">  
+  <span>🔥</span>  
+  <strong id="statDays">۰</strong>  
+  <small>روز فعال</small>  
+</div>
+
+  </div>    <div class="card">  
+    <div class="card-title">  
+      <h2>📈 ساعات مطالعه</h2>  
+      <span>۱۴ روز اخیر</span>  
+    </div>  
+    <div class="chart tall" id="statsChart"></div>  
+  </div>    <div class="card">  
+    <div class="card-title">  
+      <h2>🎯 اهداف</h2>  
+    </div>  <div class="goal-row">  
+  <div>  
+    <strong>هدف روزانه</strong>  
+    <span id="dailyGoalText"></span>  
+  </div>  
+  <div class="big-progress">  
+    <div id="dailyGoal"></div>  
+  </div>  
+</div>  
+
+<div class="goal-row">  
+  <div>  
+    <strong>هدف هفتگی</strong>  
+    <span id="weeklyGoalText"></span>  
+  </div>  
+  <div class="big-progress">  
+    <div id="weeklyGoal"></div>  
+  </div>  
+</div>
+
+  </div>  </section>  <!-- SUBJECTS -->  <section class="page" id="page-subjects">    <div class="card">  
+    <div class="card-title">  
+      <h2>📚 درس‌ها</h2>  
+      <button class="primary-btn" id="addSubjectBtn">＋ درس</button>  
+    </div>  <div class="subject-filter" id="subjectFilter"></div>  
+<div class="subject-list" id="subjectList"></div>
+
+  </div>    <div class="card">  
+    <div class="card-title">  
+      <h2>📊 عملکرد درس‌ها</h2>  
+    </div>  
+    <div id="subjectStats"></div>  
+  </div>  </section>  </main>  <button class="fab" id="fab">＋</button>
+
+</div>  <!-- ACTIVITY MODAL -->  <div class="modal" id="activityModal">  
+<div class="modal-box">    <div class="modal-head">  
+    <h2 id="activityModalTitle">افزودن فعالیت</h2>  
+    <button class="close" data-close="activityModal">×</button>  
+  </div>    <form id="activityForm">  <input type="hidden" id="editId">  
+
+<div class="form-grid">  
+
+  <div class="field">  
+    <label>تاریخ</label>  
+    <input type="date" id="fDate" required>  
+  </div>  
+
+  <div class="field">  
+    <label>درس</label>  
+    <select id="fSubject" required></select>  
+  </div>  
+
+  <div class="field">  
+    <label>مبحث</label>  
+    <input id="fTopic" placeholder="مثلاً ژنتیک">  
+  </div>  
+
+  <div class="field">  
+    <label>ساعت شروع</label>  
+    <input type="time" id="fStart" required>  
+  </div>  
+
+  <div class="field">  
+    <label>مدت</label>  
+    <input type="number" id="fDuration" min="1" value="60" required>  
+  </div>  
+
+  <div class="field">  
+    <label>تکرار</label>  
+    <select id="fRepeat">  
+      <option value="none">بدون تکرار</option>  
+      <option value="daily">هر روز</option>  
+      <option value="weekly">هر هفته</option>  
+    </select>  
+  </div>  
+
+  <div class="field full">  
+    <label>یادداشت</label>  
+    <textarea id="fNote"></textarea>  
+  </div>  
+
+</div>  
+
+<button class="save-btn">ذخیره</button>
+
+  </form>  
+</div>  
+</div>  <!-- TEST MODAL -->  <div class="modal" id="testModal">  
+<div class="modal-box">    <div class="modal-head">  
+    <h2>📝 ثبت تست</h2>  
+    <button class="close" data-close="testModal">×</button>  
+  </div>    <form id="testForm">  <div class="form-grid">  
+
+  <div class="field">  
+    <label>درس</label>  
+    <select id="testSubject" required></select>  
+  </div>  
+
+  <div class="field">  
+    <label>مبحث</label>  
+    <input id="testTopic">  
+  </div>  
+
+  <div class="field">  
+    <label>تعداد کل</label>  
+    <input type="number" id="testCount" min="1" value="20" required>  
+  </div>  
+
+  <div class="field">  
+    <label>درست</label>  
+    <input type="number" id="testCorrectInput" min="0" value="0" required>  
+  </div>  
+
+  <div class="field">  
+    <label>غلط</label>  
+    <input type="number" id="testWrongInput" min="0" value="0" required>  
+  </div>  
+
+  <div class="field">  
+    <label>نزده</label>  
+    <input type="number" id="testBlankInput" min="0" value="0">  
+  </div>  
+
+  <div class="field">  
+    <label>زمان تست (دقیقه)</label>  
+    <input type="number" id="testTime" min="0" value="30">  
+  </div>  
+
+</div>  
+
+<button class="save-btn">ثبت عملکرد</button>
+
+  </form>  
+</div>  
+</div>  <!-- MISTAKE MODAL -->  <div class="modal" id="mistakeModal">  
+<div class="modal-box">    <div class="modal-head">  
+    <h2>📕 ثبت اشتباه</h2>  
+    <button class="close" data-close="mistakeModal">×</button>  
+  </div>    <form id="mistakeForm">  <div class="field">  
+  <label>درس</label>  
+  <select id="mistakeSubject" required></select>  
+</div>  
+
+<div class="field">  
+  <label>مبحث</label>  
+  <input id="mistakeTopic">  
+</div>  
+
+<div class="field">  
+  <label>علت اشتباه</label>  
+  <select id="mistakeReason">  
+    <option>بی‌دقتی</option>  
+    <option>عدم تسلط</option>  
+    <option>فراموشی</option>  
+    <option>اشتباه محاسباتی</option>  
+    <option>برداشت اشتباه از سؤال</option>  
+    <option>مدیریت زمان</option>  
+    <option>سایر</option>  
+  </select>  
+</div>  
+
+<div class="field">  
+  <label>نکته / پاسخ صحیح</label>  
+  <textarea id="mistakeNote"></textarea>  
+</div>  
+
+<button class="save-btn">ذخیره اشتباه</button>
+
+  </form>  
+</div>  
+</div>  <!-- SUBJECT MODAL -->  <div class="modal" id="subjectModal">  
+<div class="modal-box">    <div class="modal-head">  
+    <h2>📚 افزودن درس</h2>  
+    <button class="close" data-close="subjectModal">×</button>  
+  </div>    <form id="subjectForm">  <div class="field">  
+  <label>گروه</label>  
+  <select id="newSubjectGroup">  
+    <option>تجربی</option>  
+    <option>ریاضی</option>  
+    <option>انسانی</option>  
+    <option>هنر</option>  
+    <option>زبان</option>  
+    <option>عمومی</option>  
+  </select>  
+</div>  
+
+<div class="field">  
+  <label>نام درس</label>  
+  <input id="subjectName" required>  
+</div>  
+
+<div class="field">  
+  <label>رنگ</label>  
+  <input type="color" id="subjectColor" value="#7c3aed">  
+</div>  
+
+<button class="save-btn">افزودن درس</button>
+
+  </form>  
+</div>  
+</div>  <!-- ROUTINE MODAL -->  <div class="modal" id="routineModal">  
+<div class="modal-box">    <div class="modal-head">  
+    <h2>🔄 ساخت روتین</h2>  
+    <button class="close" data-close="routineModal">×</button>  
+  </div>    <form id="routineForm">  <div class="field">  
+  <label>نام</label>  
+  <input id="routineName" placeholder="مثلاً مطالعه صبح" required>  
+</div>  
+
+<div class="field">  
+  <label>روزها</label>  
+  <select id="routineDays" multiple>  
+    <option value="1">شنبه</option>  
+    <option value="2">یکشنبه</option>  
+    <option value="3">دوشنبه</option>  
+    <option value="4">سه‌شنبه</option>  
+    <option value="5">چهارشنبه</option>  
+    <option value="6">پنجشنبه</option>  
+    <option value="0">جمعه</option>  
+  </select>  
+</div>  
+
+<button class="save-btn">ساخت روتین</button>
+
+  </form>  
+</div>  
+</div>  <!-- SETTINGS MODAL -->  <div class="modal" id="settingsModal">  
+<div class="modal-box">    <div class="modal-head">  
+    <h2>⚙️ تنظیمات</h2>  
+    <button class="close" data-close="settingsModal">×</button>  
+  </div>    <form id="settingsForm">  <div class="field">  
+  <label>نام شما</label>  
+  <input id="userName" placeholder="مثلاً علی">  
+</div>  
+
+<div class="field">  
+  <label>هدف روزانه مطالعه - دقیقه</label>  
+  <input type="number" id="dailyGoalInput" min="1">  
+</div>  
+
+<div class="field">  
+  <label>هدف هفتگی - دقیقه</label>  
+  <input type="number" id="weeklyGoalInput" min="1">  
+</div>  
+
+<div class="field">  
+  <label>تاریخ کنکور</label>  
+  <input type="date" id="examDate">  
+</div>  
+
+<button class="save-btn">ذخیره تنظیمات</button>
+
+  </form>    <div class="settings-actions">  
+    <button class="secondary-btn" id="exportBtn">⬇️ Export JSON</button>  
+    <button class="secondary-btn" id="importBtn">⬆️ Import JSON</button>  
+    <button class="secondary-btn" id="csvBtn">📊 خروجی CSV</button>  
+    <button class="danger-btn" id="resetBtn">🗑 پاک کردن اطلاعات</button>  
+  </div>    <input type="file" id="importFile" accept=".json" hidden>  </div>  
+</div>  <!-- ACHIEVEMENTS -->  <div class="modal" id="achievementModal">  
+<div class="modal-box">    <div class="modal-head">  
+    <h2>🏆 دستاوردها</h2>  
+    <button class="close" data-close="achievementModal">×</button>  
+  </div>    <div id="achievementList"></div>  </div>  
+</div>  <!-- THEME -->  <div class="modal" id="themeModal">  
+<div class="modal-box">    <div class="modal-head">  
+    <h2>🎨 انتخاب تم</h2>  
+    <button class="close" data-close="themeModal">×</button>  
+  </div>    <div class="theme-grid">  
+    <button data-theme="purple">🟣 بنفش</button>  
+    <button data-theme="blue">🔵 آبی</button>  
+    <button data-theme="green">🟢 سبز</button>  
+    <button data-theme="amoled">⚫ AMOLED</button>  
+    <button data-theme="light">☀️ روشن</button>  
+  </div>  </div>  
+</div> 
+</head>  
+  <script src="app.js"></script> 
+</body>  
+  </html>
